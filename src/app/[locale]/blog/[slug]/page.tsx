@@ -12,6 +12,7 @@ import {absoluteUrl} from '@/lib/urls';
 type Params = {locale: Locale; slug: string};
 export const runtime = 'nodejs';
 export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 type Post = {
   id: string;

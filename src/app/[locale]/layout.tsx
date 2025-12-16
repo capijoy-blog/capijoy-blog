@@ -6,6 +6,9 @@ import Navbar from '@/components/site/Navbar';
 import Footer from '@/components/site/Footer';
 import {ThemeProvider} from '@/components/providers/theme-provider';
 
+import JsonLdPerson from '@/components/seo/JsonLdPerson';
+import FloatingWhatsapp from '@/components/site/FloatingWhatsapp';
+
 type Params = {locale: Locale};
 
 export async function generateStaticParams() {
@@ -25,11 +28,13 @@ export default async function LocaleLayout({
 
   return (
     <ThemeProvider>
+      <JsonLdPerson />
       <NextIntlClientProvider locale={safeLocale} messages={messages}>
         <div className="flex min-h-dvh flex-col">
           <Navbar locale={safeLocale} />
           <main className="flex-1">{children}</main>
           <Footer />
+          <FloatingWhatsapp />
         </div>
       </NextIntlClientProvider>
     </ThemeProvider>

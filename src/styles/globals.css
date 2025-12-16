@@ -1,41 +1,77 @@
 @import "tailwindcss";
-/* depois pode incluir resets/overrides */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap');
 
 :root {
   color-scheme: light;
-  --page-bg: #f8fafc;
-  --page-text: #000000; /* Alterado para preto */
-  --surface-card: rgba(255, 255, 255, 0.5); /* Mais transparente */
-  --surface-card-border: rgba(15, 23, 42, 0.08);
-  --surface-overlay: rgba(255, 255, 255, 0.55);
-  --header-bg: rgba(255, 255, 255, 0.6); /* Mais transparente */
-  --muted-text: rgba(0, 0, 0, 0.8); /* Mais escuro */
+  --page-bg: #f2ede6;
+  --page-text: #181a1f;
+  --muted-text: #353c4b;
+  --accent: #ff7700;
+  --accent-strong: #ffc600;
+  --accent-soft: #ff7700;
+  --surface-card: rgba(255, 253, 249, 0.82);
+  --surface-card-border: rgba(31, 27, 24, 0.12);
+  --surface-overlay: radial-gradient(circle at 20% 20%, rgba(42, 59, 216, 0.08), transparent 36%),
+    radial-gradient(circle at 80% 10%, rgba(100, 91, 232, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.62));
+  --header-bg: rgba(242, 237, 230, 0.82);
 }
 
 .dark {
   color-scheme: dark;
-  --page-bg: #050505;
-  --page-text: #f8fafc;
-  --surface-card: rgba(18, 18, 18, 0.5); /* Mais transparente */
-  --surface-card-border: rgba(248, 250, 252, 0.14);
-  --surface-overlay: rgba(0, 0, 0, 0.65);
-  --header-bg: rgba(18, 18, 18, 0.6); /* Mais transparente */
-  --muted-text: rgba(226, 232, 240, 0.72);
+  --page-bg: #03050b;
+  --page-text: #f8f4ec;
+  --muted-text: rgba(248, 241, 231, 0.76);
+  --accent: #ff7700;
+  --accent-strong: #ff7700;
+  --accent-soft: #ffc600;
+  --surface-card: rgba(28, 19, 13, 0.82);
+  --surface-card-border: rgba(91, 117, 232, 0.28);
+  --surface-overlay: radial-gradient(circle at 18% 18%, rgba(54, 42, 216, 0.14), transparent 38%),
+    radial-gradient(circle at 78% 12%, rgba(91, 117, 232, 0.2), transparent 36%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.72));
+  --header-bg: rgba(6, 10, 12, 0.8);
+}
+
+::selection {
+  background: rgba(14, 27, 61, 0.28);
+  color: #fefbf6;
 }
 
 body {
   background: var(--page-bg);
+  background-image: var(--surface-overlay);
   color: var(--page-text);
+  font-family: 'Inter', 'Lato', system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv03", "cv04", "ss03";
   transition: background 250ms ease, color 250ms ease;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+}
+
+em,
+.serif {
+  font-family: 'Playfair Display', 'Inter', serif;
+}
+
 .section-card {
-  background: var(--surface-card);
+  background: linear-gradient(145deg, rgba(42, 112, 216, 0.08), rgba(91, 169, 232, 0.05)), var(--surface-card);
   color: var(--page-text);
   border: 1px solid var(--surface-card-border);
-  box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15); /* Sombra mais forte */
-  backdrop-filter: blur(25px); /* Efeito fosco mais forte */
-  transition: background 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  backdrop-filter: blur(20px);
+  transition: transform 250ms ease, box-shadow 250ms ease, background 250ms ease, color 250ms ease;
+}
+
+.section-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 36px 72px rgba(0, 0, 0, 0.32), 0 0 0 1px var(--accent) inset;
+  border-color: var(--accent);
 }
 
 .section-card a {
@@ -43,17 +79,17 @@ body {
 }
 
 .section-overlay {
-  background: var(--surface-overlay);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.2));
   transition: background 250ms ease;
 }
 
 .music-section-overlay {
-  background: rgba(255, 255, 255, 0.35);
+  background: linear-gradient(120deg, rgba(0, 0, 0, 0.55), rgba(26, 44, 60, 0.75));
   transition: background 250ms ease;
 }
 
 .dark .music-section-overlay {
-  background: rgba(0, 0, 0, 0.45);
+  background: linear-gradient(120deg, rgba(0, 0, 0, 0.52), rgba(24, 28, 31, 0.82));
 }
 
 .text-muted {
@@ -66,45 +102,57 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border: 1px solid #facc15;
-  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--accent-soft);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--page-text);
   backdrop-filter: blur(14px);
-  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease, transform 200ms ease;
 }
 
 .surface-button:hover {
-  background: rgba(15, 23, 42, 0.08);
+  background: rgba(42, 97, 216, 0.16);
+  border-color: var(--accent);
+  transform: translateY(-1px);
 }
 
 .dark .surface-button {
-  background: rgba(12, 13, 19, 0.6);
-  color: var(--page-text);
-}
-
-.dark .surface-button:hover {
-  background: rgba(248, 250, 252, 0.08);
+  background: rgba(9, 12, 18, 0.8);
 }
 
 .input-surface {
-  background: rgba(255, 255, 255, 0.2); /* Mais transparente */
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--surface-card-border);
   color: var(--page-text);
   backdrop-filter: blur(12px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: background 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
 
 .input-surface:focus {
-  background: rgba(255, 255, 255, 0.4); /* Mais claro no foco */
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--accent-soft);
+  outline: none;
+  box-shadow: 0 10px 30px rgba(255, 119, 0, 0.18);
 }
 
 .dark .input-surface {
-  background: rgba(12, 13, 19, 0.3); /* Ajustado para o modo escuro */
+  background: rgba(18, 13, 9, 0.72);
   border-color: var(--surface-card-border);
   color: var(--page-text);
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 9999px;
+  padding: 0.35rem 0.9rem;
+  background: rgba(216, 122, 42, 0.12);
+  color: var(--page-text);
+  border: 1px solid rgba(232, 164, 91, 0.4);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
 
 @layer utilities {
   .animate-aurora-spin {
@@ -116,7 +164,78 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-animated-bg {
+  background: linear-gradient(-45deg, #050505, #4a1800, #ff5e00, #ffc600, #4a1800, #050505);
+  background-size: 400% 400%;
+  animation: gradient-flow 12s ease infinite;
+}
+
+@keyframes music-pulse {
+
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scaleY(0.5);
+    opacity: 0.7;
+  }
+}
+
+.animate-music-pulse {
+  animation: music-pulse 1s ease-in-out infinite;
+}
+
+@keyframes ekg-dash {
+  0% {
+    stroke-dasharray: 0 1000;
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  40% {
+    stroke-dasharray: 300 1000;
+    /* Length of the visible segment */
+    stroke-dashoffset: -100;
+  }
+
+  100% {
+    stroke-dasharray: 300 1000;
+    stroke-dashoffset: -600;
+    /* Move it all the way across */
+    opacity: 0;
+  }
+}
+
+.animate-ekg-path {
+  stroke-dasharray: 300 1000;
+  /* Initial state */
+  stroke-dashoffset: 0;
+  animation: ekg-dash 2.5s linear infinite;
 }

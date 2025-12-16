@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import {FaYoutube, FaInstagram, FaTiktok, FaFacebook, FaSpotify, FaApple} from 'react-icons/fa6';
 
 const SOCIALS = [
@@ -12,10 +12,29 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className="mt-10 border-t py-8">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 sm:flex-row sm:items-center">
-        <p className="text-sm opacity-80">© Capí Joy 2025 — Todos os direitos reservados.</p>
-        <ul className="ml-auto flex items-center gap-3 text-xl text-neutral-600 transition dark:text-neutral-400">
+    <footer className="mt-10 border-t border-[var(--surface-card-border)] bg-black/30">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-7 sm:flex-row sm:items-center">
+        <div className="space-y-1">
+          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Capí Joy</p>
+          <p className="text-sm text-muted">Arte que cura pela verdade. Minas Gerais, Brasil.</p>
+          <div className="flex flex-wrap gap-3 text-sm">
+            <Link href="mailto:contato@capijoy.com.br" className="underline">
+              contato@capijoy.com.br
+            </Link>
+            <span className="text-muted">|</span>
+            <Link
+              href="https://wa.me/5537998765452?text=Ol%C3%A1%2C+vim+pelo+site+Cap%C3%AD+Joy+e+quero+saber+mais."
+              className="underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp
+            </Link>
+          </div>
+          <p className="text-xs text-muted">© Capí Joy 2025. Voz, verdade e liberdade.</p>
+        </div>
+
+        <ul className="ml-auto flex items-center gap-3 text-xl text-neutral-300 transition sm:text-2xl">
           {SOCIALS.map(({label, href, Icon}) => (
             <li key={label}>
               <Link
@@ -23,7 +42,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="inline-flex hover:opacity-80"
+                className="inline-flex rounded-full p-2 hover:bg-white/5 hover:text-[var(--accent-soft)]"
               >
                 <Icon aria-hidden />
               </Link>

@@ -26,7 +26,7 @@ export default function LocaleSwitcher({value}: {value: Locale}) {
     <select
       value={value}
       onChange={onChange}
-      className="rounded-md border border-neutral-300 bg-white/70 px-2 py-1 text-sm text-neutral-800 transition-colors duration-300 dark:border-neutral-700 dark:bg-neutral-900/80 dark:text-white"
+      className="rounded-full border border-[var(--surface-card-border)] bg-black/20 px-3 py-2 text-sm text-[var(--page-text)] transition-colors duration-300 hover:border-[var(--accent-soft)]"
       aria-label={t('title')}
     >
       {locales.map(locale => (
