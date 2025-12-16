@@ -11,8 +11,6 @@ import SectionSeparator from '@/components/site/SectionSeparator';
 import type { Locale } from '@/i18n/locales';
 import { absoluteUrl } from '@/lib/urls';
 
-type Params = { locale: Locale };
-
 const FEATURE_CARDS = [
   {
     title: 'BASTA',

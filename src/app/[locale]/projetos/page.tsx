@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 
 import type { Locale } from '@/i18n/locales';
@@ -79,7 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 }
 
 export default async function ProjetosPage({ params }: { params: Promise<Params> }) {
-  const { locale } = await params;
+  await params;
 
   return (
     <div className="mx-auto w-full max-w-5xl space-y-8 px-4 py-12">

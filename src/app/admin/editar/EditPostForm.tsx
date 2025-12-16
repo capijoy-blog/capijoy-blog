@@ -1,7 +1,8 @@
 'use client';
 
-import {useActionState, useRef, useState, type ChangeEvent} from 'react';
-import {updatePost, type UpdatePostState} from './actions';
+import { useActionState, useRef, useState, type ChangeEvent } from 'react';
+import Image from 'next/image';
+import { updatePost, type UpdatePostState } from './actions';
 import TiptapEditor from '@/components/TiptapEditor';
 
 interface EditPostFormProps {
@@ -18,9 +19,9 @@ interface EditPostFormProps {
   };
 }
 
-export default function EditPostForm({post}: EditPostFormProps) {
+export default function EditPostForm({ post }: EditPostFormProps) {
   const boundUpdate = updatePost.bind(null, post.id);
-  const initialState: UpdatePostState = {message: ''};
+  const initialState: UpdatePostState = { message: '' };
   const [state, formAction] = useActionState<UpdatePostState, FormData>(boundUpdate, initialState);
   const [contentHtml, setContentHtml] = useState(post.content_html);
   const [removeCoverImage, setRemoveCoverImage] = useState(false);
@@ -126,8 +127,14 @@ export default function EditPostForm({post}: EditPostFormProps) {
         </div>
 
         {post.cover_image_url && !removeCoverImage && (
-          <div className="mt-2 overflow-hidden rounded-md border border-neutral-200 bg-white">
-            <img src={post.cover_image_url} alt={`Imagem de capa atual de ${post.title}`} className="h-48 w-full object-cover" />
+          <div className="relative mt-2 h-48 w-full overflow-hidden rounded-md border border-neutral-200 bg-white">
+            <Image
+              src={post.cover_image_url!}
+              alt={`Imagem de capa atual de ${post.title}`}
+              fill
+              className="object-cover"
+              unoptimized
+            />
           </div>
         )}
 

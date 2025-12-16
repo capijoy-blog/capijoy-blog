@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import {notFound} from 'next/navigation';
-import {createServerClient} from '@/lib/supabaseServer';
+import { notFound } from 'next/navigation';
+import { createServerClient } from '@/lib/supabaseServer';
 import EditPostForm from '../EditPostForm';
 
 type AdminLocale = 'pt' | 'en' | 'es';
@@ -20,16 +20,16 @@ export default async function EditPostPage({
   params,
   searchParams
 }: {
-  params: Promise<{slug: string}>;
-  searchParams: Promise<{locale?: string | string[]}>;
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ locale?: string | string[] }>;
 }) {
-  const {slug} = await params;
+  const { slug } = await params;
   const incomingSearch = (await searchParams) ?? {};
   const localeParam = incomingSearch.locale;
   const requestedLocale = Array.isArray(localeParam) ? localeParam[0] : localeParam;
 
   const supabase = await createServerClient();
-  const {data: posts, error} = await supabase
+  const { data: posts, error } = await supabase
     .from('posts')
     .select('*')
     .eq('slug', slug);
@@ -54,11 +54,11 @@ export default async function EditPostPage({
     (postsByLocale.has('pt')
       ? 'pt'
       : isAdminLocale(posts[0]?.locale)
-      ? (posts[0]?.locale as AdminLocale)
-      : 'pt');
+        ? (posts[0]?.locale as AdminLocale)
+        : 'pt');
 
   const resolvedLocale: AdminLocale =
-    (requestedLocale && AVAILABLE_LOCALES.includes(requestedLocale as AdminLocale) && postsByLocale.has(requestedLocale)
+    (requestedLocale && isAdminLocale(requestedLocale) && postsByLocale.has(requestedLocale)
       ? (requestedLocale as AdminLocale)
       : fallbackLocale) ?? 'pt';
 
@@ -70,7 +70,7 @@ export default async function EditPostPage({
 
   const missingRequestedLocale =
     Boolean(requestedLocale) &&
-    (!AVAILABLE_LOCALES.includes(requestedLocale as AdminLocale) || !postsByLocale.has(requestedLocale));
+    (!isAdminLocale(requestedLocale) || !postsByLocale.has(requestedLocale));
   const requestedLocaleLabel =
     requestedLocale && isAdminLocale(requestedLocale) ? LOCALE_LABEL[requestedLocale] : requestedLocale?.toUpperCase();
 

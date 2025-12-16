@@ -2,26 +2,26 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {useState} from 'react';
-import {FiMenu, FiX} from 'react-icons/fi';
-import {useTranslations} from 'next-intl';
-import {ThemeToggle} from '@/components/ui/ThemeToggle';
+import { useState } from 'react';
+import { FiMenu, FiX } from 'react-icons/fi';
+import { useTranslations } from 'next-intl';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import LocaleSwitcher from '@/components/site/LocaleSwitcher';
-import type {Locale} from '@/i18n/locales';
+import type { Locale } from '@/i18n/locales';
 
 const NAV_LINKS = [
-  {key: 'home', path: '#topo'},
-  {key: 'about', path: '/sobre'},
-  {key: 'music', path: '/musicas'},
-  {key: 'projects', path: '/projetos'},
-  {key: 'book', path: '/livro'},
-  {key: 'blog', path: '/blog'},
-  {key: 'faq', path: '#faq'},
-  {key: 'press', path: '/press-kit'},
-  {key: 'contact', path: '/contato', highlight: true}
+  { key: 'home', path: '#topo' },
+  { key: 'about', path: '/sobre' },
+  { key: 'music', path: '/musicas' },
+  { key: 'projects', path: '/projetos' },
+  { key: 'book', path: '/livro' },
+  { key: 'blog', path: '/blog' },
+  { key: 'faq', path: '#faq' },
+  { key: 'press', path: '/press-kit' },
+  { key: 'contact', path: '/contato', highlight: true }
 ] as const;
 
-export default function Navbar({locale}: {locale: Locale}) {
+export default function Navbar({ locale }: { locale: Locale }) {
   const t = useTranslations('nav');
   const [open, setOpen] = useState(false);
 
@@ -38,7 +38,7 @@ export default function Navbar({locale}: {locale: Locale}) {
           link.path.startsWith('#') ? `/${locale}${link.path}` : `/${locale}${link.path}`;
         const baseStyles =
           'rounded-full px-3 py-2 font-medium transition hover:text-[var(--accent-soft)]';
-        const accentStyles = link.highlight
+        const accentStyles = 'highlight' in link && link.highlight
           ? 'bg-[var(--accent)] text-black shadow-lg shadow-[rgba(216,122,42,0.35)] hover:bg-[var(--accent-soft)]'
           : 'text-[var(--page-text)]/85 hover:bg-white/5';
 

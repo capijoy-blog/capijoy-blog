@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { FaFingerprint, FaPenNib, FaHashtag, FaMusic } from 'react-icons/fa6';
+import { FaPenNib } from 'react-icons/fa6';
 
 type SeparatorVariant = 'music' | 'life' | 'book' | 'social' | 'default';
 
