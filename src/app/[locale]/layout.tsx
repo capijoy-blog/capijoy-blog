@@ -1,18 +1,18 @@
-﻿import {NextIntlClientProvider} from 'next-intl';
-import {getMessages} from 'next-intl/server';
-import type {ReactNode} from 'react';
-import {locales, type Locale, defaultLocale} from '@/i18n/locales';
+﻿import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import type { ReactNode } from 'react';
+import { locales, type Locale, defaultLocale } from '@/i18n/locales';
 import Navbar from '@/components/site/Navbar';
 import Footer from '@/components/site/Footer';
-import {ThemeProvider} from '@/components/providers/theme-provider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 
 import JsonLdPerson from '@/components/seo/JsonLdPerson';
 import FloatingWhatsapp from '@/components/site/FloatingWhatsapp';
 
-type Params = {locale: Locale};
+type Params = { locale: string };
 
 export async function generateStaticParams() {
-  return locales.map(locale => ({locale}));
+  return locales.map(locale => ({ locale }));
 }
 
 export default async function LocaleLayout({
@@ -22,8 +22,9 @@ export default async function LocaleLayout({
   children: ReactNode;
   params: Promise<Params>;
 }) {
-  const {locale} = await params;
-  const messages = await getMessages({locale});
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale as Locale;
+  const messages = await getMessages({ locale });
   const safeLocale = locale ?? defaultLocale;
 
   return (

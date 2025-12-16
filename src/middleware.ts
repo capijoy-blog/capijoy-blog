@@ -1,7 +1,7 @@
 ﻿import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import createMiddleware from 'next-intl/middleware';
-import routing from '@/../next-intl.config';
+import routing from '../next-intl.config';
 
 
 export async function middleware(request: NextRequest) {
