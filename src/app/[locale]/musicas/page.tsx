@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 
 import Accordion from '@/components/site/Accordion';
-import type {Locale} from '@/i18n/locales';
-import {absoluteUrl} from '@/lib/urls';
+import type { Locale } from '@/i18n/locales';
+import { absoluteUrl } from '@/lib/urls';
 
-type Params = {locale: Locale};
+type Params = { locale: Locale };
 
 const SONGS = [
   {
@@ -36,8 +36,8 @@ const SONGS = [
   }
 ] as const;
 
-export async function generateMetadata({params}: {params: Promise<Params>}): Promise<Metadata> {
-  const {locale} = await params;
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { locale } = await params;
   const path = `/${locale}/musicas`;
   const url = absoluteUrl(path);
 
@@ -55,15 +55,15 @@ export async function generateMetadata({params}: {params: Promise<Params>}): Pro
   };
 }
 
-export default async function MusicasPage({params}: {params: Promise<Params>}) {
-  const {locale} = await params;
+export default async function MusicasPage({ params }: { params: Promise<Params> }) {
+  const { locale } = await params;
 
   return (
     <div className="mx-auto w-full max-w-5xl space-y-10 px-4 py-12">
       <header className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Discografia</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Discografia</p>
         <h1 className="text-3xl font-semibold">Músicas de Capí Joy</h1>
-        <p className="max-w-3xl text-base text-muted">
+        <p className="max-w-3xl text-base text-cj-textMuted">
           Canções que nascem da alma. Verdadeiras, intensas e cheias de propósito. Cada música carrega uma história, uma
           dor, um recomeço e uma mensagem.
         </p>
@@ -74,15 +74,15 @@ export default async function MusicasPage({params}: {params: Promise<Params>}) {
           <article key={song.id} id={song.id} className="section-card overflow-hidden rounded-3xl">
             <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent-soft)]">{song.tag}</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-cj-accent">{song.tag}</p>
                 <h2 className="text-2xl font-semibold">{song.title}</h2>
-                <p className="text-sm text-muted">{song.description}</p>
+                <p className="text-sm text-cj-textMuted">{song.description}</p>
                 <div className="flex flex-wrap gap-3">
                   <Link
                     href="https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-black shadow-lg shadow-[rgba(216,122,42,0.35)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-soft)]"
+                    className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
                   >
                     Ouvir no Spotify
                   </Link>
@@ -133,25 +133,25 @@ export default async function MusicasPage({params}: {params: Promise<Params>}) {
       </div>
 
       <section className="section-card space-y-4 rounded-3xl p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Próximos lançamentos</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Próximos lançamentos</p>
         <ul className="grid gap-3 md:grid-cols-2">
-          <li className="rounded-2xl bg-black/15 p-4 text-sm text-muted">
+          <li className="rounded-2xl bg-white/5 p-4 text-sm text-cj-textMuted">
             • Versão em inglês de “BASTA” em produção.
           </li>
-          <li className="rounded-2xl bg-black/15 p-4 text-sm text-muted">• Novas reflexões musicadas e conteúdos exclusivos.</li>
-          <li className="rounded-2xl bg-black/15 p-4 text-sm text-muted">• Materiais para shows, conferências e encontros.</li>
-          <li className="rounded-2xl bg-black/15 p-4 text-sm text-muted">• Letras completas serão publicadas aqui assim que finalizadas.</li>
+          <li className="rounded-2xl bg-white/5 p-4 text-sm text-cj-textMuted">• Novas reflexões musicadas e conteúdos exclusivos.</li>
+          <li className="rounded-2xl bg-white/5 p-4 text-sm text-cj-textMuted">• Materiais para shows, conferências e encontros.</li>
+          <li className="rounded-2xl bg-white/5 p-4 text-sm text-cj-textMuted">• Letras completas serão publicadas aqui assim que finalizadas.</li>
         </ul>
         <div className="flex flex-wrap gap-3">
           <Link
             href={`/${locale}/contato`}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-[rgba(216,122,42,0.35)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-soft)]"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
           >
             Chamar para shows e agenda
           </Link>
           <Link
             href={`/${locale}/press-kit`}
-            className="text-sm font-semibold underline decoration-[var(--accent-soft)] underline-offset-8"
+            className="text-sm font-semibold underline decoration-cj-accent underline-offset-8"
           >
             Press kit atualizado
           </Link>

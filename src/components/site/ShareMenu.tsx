@@ -1,10 +1,10 @@
 "use client";
 
-import {useEffect, useMemo, useRef, useState} from 'react';
-import {useTranslations} from 'next-intl';
-import {LuCheck, LuCopy, LuShare2} from 'react-icons/lu';
-import {FaWhatsapp, FaFacebookF, FaLinkedinIn} from 'react-icons/fa';
-import {FaXTwitter} from 'react-icons/fa6';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { LuCheck, LuCopy, LuShare2 } from 'react-icons/lu';
+import { FaWhatsapp, FaFacebookF, FaLinkedinIn } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 type ShareMenuProps = {
   url: string;
@@ -25,7 +25,7 @@ function normalizeUrl(path: string, origin?: string) {
   return `${sanitizedBase}${sanitizedPath}`;
 }
 
-export default function ShareMenu({url, title, className}: ShareMenuProps) {
+export default function ShareMenu({ url, title, className }: ShareMenuProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -82,7 +82,7 @@ export default function ShareMenu({url, title, className}: ShareMenuProps) {
   const handleToggle = async () => {
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
-        await navigator.share({title, url: shareUrl});
+        await navigator.share({ title, url: shareUrl });
         return;
       } catch (error) {
         if ((error as Error).name === "AbortError") {
@@ -137,7 +137,7 @@ export default function ShareMenu({url, title, className}: ShareMenuProps) {
       <button
         type="button"
         onClick={handleToggle}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-amber-400 text-neutral-900 transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:ring-offset-2 focus:ring-offset-neutral-900"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-black transition hover:bg-cj-textSoft focus:outline-none focus:ring-2 focus:ring-cj-textSoft focus:ring-offset-2 focus:ring-offset-black"
         aria-haspopup="true"
         aria-expanded={isOpen}
         aria-label={t('buttonAria')}
@@ -145,8 +145,8 @@ export default function ShareMenu({url, title, className}: ShareMenuProps) {
         <LuShare2 className="h-4 w-4" />
       </button>
       {isOpen && (
-        <div className="absolute right-0 top-11 z-50 w-48 rounded-xl border border-white/10 bg-neutral-950/95 p-2 text-sm shadow-xl backdrop-blur">
-          <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wide text-white/60">{t('title')}</p>
+        <div className="absolute right-0 top-11 z-50 w-48 rounded-xl border border-cj-border bg-cj-surface p-2 text-sm shadow-xl backdrop-blur">
+          <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wide text-cj-textMuted">{t('title')}</p>
           <div className="space-y-1">
             {shareOptions.map(option => (
               <a
@@ -154,7 +154,7 @@ export default function ShareMenu({url, title, className}: ShareMenuProps) {
                 href={option.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-white transition hover:bg-white/10"
+                className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-cj-text transition hover:bg-white/5"
               >
                 <option.icon className="h-4 w-4" />
                 <span>{option.label}</span>
@@ -163,7 +163,7 @@ export default function ShareMenu({url, title, className}: ShareMenuProps) {
             <button
               type="button"
               onClick={handleCopy}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-white transition hover:bg-white/10"
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-cj-text transition hover:bg-white/5"
             >
               {copied ? <LuCheck className="h-4 w-4" /> : <LuCopy className="h-4 w-4" />}
               <span>{copied ? t('copied') : t('copy')}</span>

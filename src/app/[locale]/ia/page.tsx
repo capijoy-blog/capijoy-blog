@@ -1,13 +1,13 @@
 import Script from 'next/script';
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 
-import type {Locale} from '@/i18n/locales';
-import {absoluteUrl} from '@/lib/urls';
+import type { Locale } from '@/i18n/locales';
+import { absoluteUrl } from '@/lib/urls';
 
-type Params = {locale: Locale};
+type Params = { locale: Locale };
 
-export async function generateMetadata({params}: {params: Promise<Params>}): Promise<Metadata> {
-  const {locale} = await params;
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { locale } = await params;
   const path = `/${locale}/ia`;
   const url = absoluteUrl(path);
 
@@ -60,12 +60,12 @@ const STRUCTURED = {
   ]
 };
 
-export default async function IaPage({params}: {params: Promise<Params>}) {
-  const {locale} = await params;
+export default async function IaPage({ params }: { params: Promise<Params> }) {
+  const { locale } = await params;
   const base = absoluteUrl(`/${locale}`);
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-12 text-sm leading-7">
+    <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-12 text-sm leading-7 text-cj-textMuted">
       <Script id="jsonld-ia" type="application/ld+json">
         {JSON.stringify(STRUCTURED)}
       </Script>

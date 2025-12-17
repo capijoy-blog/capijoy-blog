@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import {getTranslations} from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import ShareMenu from "@/components/site/ShareMenu";
-import {supabase} from "@/lib/supabase";
-import type {Locale} from "@/i18n/locales";
+import { supabase } from "@/lib/supabase";
+import type { Locale } from "@/i18n/locales";
 
 export const runtime = "nodejs";
 export const revalidate = 0;
@@ -27,23 +27,23 @@ type Post = {
 function formatDate(date: string, locale: Locale) {
   return new Intl.DateTimeFormat(
     locale === "en" ? "en-US" : locale === "es" ? "es-ES" : "pt-BR",
-    {dateStyle: "long"}
+    { dateStyle: "long" }
   ).format(new Date(date));
 }
 
-export default async function HomePosts({locale}: HomePostsProps) {
-  const t = await getTranslations({locale, namespace: "homePosts"});
+export default async function HomePosts({ locale }: HomePostsProps) {
+  const t = await getTranslations({ locale, namespace: "homePosts" });
 
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from("posts")
     .select("id, title, excerpt, slug, cover_image_url, published_at, status, locale")
     .eq("locale", locale)
     .eq("status", "published")
-    .order("published_at", {ascending: false})
+    .order("published_at", { ascending: false })
     .limit(3);
 
   if (error) {
-    return <p className="text-sm text-red-600">{t("error", {message: error.message})}</p>;
+    return <p className="text-sm text-red-600">{t("error", { message: error.message })}</p>;
   }
 
   const posts = (data ?? []) as Post[];
@@ -67,24 +67,24 @@ export default async function HomePosts({locale}: HomePostsProps) {
               />
             </div>
           ) : (
-            <div className="grid h-40 place-items-center rounded-t-2xl bg-neutral-200/60 text-xs uppercase tracking-wide text-neutral-600 transition-colors dark:bg-black/40 dark:text-neutral-400">
+            <div className="grid h-40 place-items-center rounded-t-2xl bg-cj-surface text-xs uppercase tracking-wide text-cj-textMuted transition-colors">
               {t("coverUnavailable")}
             </div>
           )}
           <div className="space-y-3 p-4">
-            <time className="block text-xs uppercase tracking-wide text-neutral-500">
+            <time className="block text-xs uppercase tracking-wide text-cj-textMuted">
               {formatDate(post.published_at, locale)}
             </time>
             <h4 className="line-clamp-2 font-semibold">{post.title}</h4>
             {post.excerpt && (
-              <p className="text-sm text-neutral-600 whitespace-pre-line dark:text-neutral-300">
+              <p className="text-sm text-cj-textMuted whitespace-pre-line">
                 {post.excerpt}
               </p>
             )}
             <div className="flex items-center justify-between gap-3 pt-1">
               <Link
                 href={`/${locale}/blog/${post.slug}`}
-                className="text-sm font-medium text-white underline underline-offset-4"
+                className="text-sm font-medium text-white underline underline-offset-4 hover:text-cj-accent transition-colors"
               >
                 {t("readPost")}
               </Link>

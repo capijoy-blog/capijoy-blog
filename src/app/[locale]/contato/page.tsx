@@ -1,21 +1,21 @@
 import Link from 'next/link';
-import type {Metadata} from 'next';
-import {FaWhatsapp, FaEnvelope, FaInstagram, FaYoutube, FaSpotify} from 'react-icons/fa6';
+import type { Metadata } from 'next';
+import { FaWhatsapp, FaEnvelope, FaInstagram, FaYoutube, FaSpotify } from 'react-icons/fa6';
 
-import type {Locale} from '@/i18n/locales';
-import {absoluteUrl} from '@/lib/urls';
+import type { Locale } from '@/i18n/locales';
+import { absoluteUrl } from '@/lib/urls';
 
-type Params = {locale: Locale};
+type Params = { locale: Locale };
 
 const SOCIALS = [
-  {label: 'WhatsApp', href: 'https://wa.me/5537998765452?text=Ol%C3%A1%2C+vim+pelo+site+Cap%C3%AD+Joy+e+quero+falar+com+voc%C3%AA.', Icon: FaWhatsapp},
-  {label: 'Instagram', href: 'https://www.instagram.com/capijoy/', Icon: FaInstagram},
-  {label: 'YouTube', href: 'https://www.youtube.com/@dicapijoy', Icon: FaYoutube},
-  {label: 'Spotify', href: 'https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI', Icon: FaSpotify}
+  { label: 'WhatsApp', href: 'https://wa.me/5537998765452?text=Ol%C3%A1%2C+vim+pelo+site+Cap%C3%AD+Joy+e+quero+falar+com+voc%C3%AA.', Icon: FaWhatsapp },
+  { label: 'Instagram', href: 'https://www.instagram.com/capijoy/', Icon: FaInstagram },
+  { label: 'YouTube', href: 'https://www.youtube.com/@dicapijoy', Icon: FaYoutube },
+  { label: 'Spotify', href: 'https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI', Icon: FaSpotify }
 ] as const;
 
-export async function generateMetadata({params}: {params: Promise<Params>}): Promise<Metadata> {
-  const {locale} = await params;
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { locale } = await params;
   const path = `/${locale}/contato`;
   const url = absoluteUrl(path);
 
@@ -29,15 +29,15 @@ export async function generateMetadata({params}: {params: Promise<Params>}): Pro
   };
 }
 
-export default async function ContatoPage({params}: {params: Promise<Params>}) {
+export default async function ContatoPage({ params }: { params: Promise<Params> }) {
   await params; // locale not used besides metadata
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8 px-4 py-12">
       <header className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Contato</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Contato</p>
         <h1 className="text-3xl font-semibold">Convites, parcerias e agenda</h1>
-        <p className="text-base text-muted">
+        <p className="text-base text-cj-textMuted">
           Nada de alto valor sai de graça: antes de liberar materiais exclusivos, capturamos o contato. Nome e e-mail
           são obrigatórios; WhatsApp é opcional.
         </p>
@@ -94,7 +94,7 @@ export default async function ContatoPage({params}: {params: Promise<Params>}) {
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-[rgba(216,122,42,0.35)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-soft)]"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
           >
             Enviar
           </button>
@@ -108,31 +108,31 @@ export default async function ContatoPage({params}: {params: Promise<Params>}) {
             WhatsApp direto
           </Link>
         </div>
-        <p className="text-xs text-muted">
+        <p className="text-xs text-cj-textMuted">
           Testado: formulário envia para contato@capijoy.com.br. O download do livro não abre sem capturar contato.
         </p>
       </form>
 
       <section className="section-card space-y-3 rounded-3xl p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Canais oficiais</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Canais oficiais</p>
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="flex items-center gap-3 rounded-2xl bg-black/15 px-4 py-3 text-sm text-muted">
+          <div className="flex items-center gap-3 rounded-2xl bg-cj-surface px-4 py-3 text-sm text-cj-textMuted">
             <FaEnvelope aria-hidden />
             contato@capijoy.com.br
           </div>
-          <div className="flex items-center gap-3 rounded-2xl bg-black/15 px-4 py-3 text-sm text-muted">
+          <div className="flex items-center gap-3 rounded-2xl bg-cj-surface px-4 py-3 text-sm text-cj-textMuted">
             <FaWhatsapp aria-hidden />
             +55 (37) 99876-5452
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          {SOCIALS.map(({label, href, Icon}) => (
+          {SOCIALS.map(({ label, href, Icon }) => (
             <Link
               key={label}
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--surface-card-border)] px-4 py-2 text-sm font-semibold hover:border-[var(--accent-soft)]"
+              className="inline-flex items-center gap-2 rounded-full border border-cj-border px-4 py-2 text-sm font-semibold hover:border-cj-accent transition-colors"
             >
               <Icon aria-hidden />
               {label}
@@ -142,8 +142,8 @@ export default async function ContatoPage({params}: {params: Promise<Params>}) {
       </section>
 
       <section className="section-card space-y-3 rounded-3xl p-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Agenda</p>
-        <p className="text-sm text-muted">
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Agenda</p>
+        <p className="text-sm text-cj-textMuted">
           Campo reservado para datas oficiais de eventos, conferências e lançamentos. Estrutura pronta para receber
           conteúdo assim que as datas forem confirmadas.
         </p>

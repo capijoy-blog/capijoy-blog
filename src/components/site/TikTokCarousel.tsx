@@ -1,8 +1,8 @@
 ﻿"use client";
 
 import Image from 'next/image';
-import {useTranslations} from 'next-intl';
-import {useEffect, useMemo, useRef, useState} from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export type TikTokVideo = {
   url: string;
@@ -20,7 +20,7 @@ function extractVideoId(url: string): string | null {
   return match?.[1] ?? null;
 }
 
-export default function TikTokCarousel({videos}: TikTokCarouselProps) {
+export default function TikTokCarousel({ videos }: TikTokCarouselProps) {
   const t = useTranslations('tiktok');
   const containerRef = useRef<HTMLDivElement>(null);
   const [covers, setCovers] = useState<Record<string, string>>({});
@@ -32,7 +32,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
   const updateScrollState = () => {
     const container = containerRef.current;
     if (!container) return;
-    const {scrollLeft, clientWidth, scrollWidth} = container;
+    const { scrollLeft, clientWidth, scrollWidth } = container;
     setCanScrollLeft(scrollLeft > 8);
     setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 8);
   };
@@ -44,9 +44,9 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
         if (!id) {
           return null;
         }
-        return {...video, id};
+        return { ...video, id };
       })
-      .filter(Boolean) as Array<TikTokVideo & {id: string}>;
+      .filter(Boolean) as Array<TikTokVideo & { id: string }>;
 
     if (!entries.length) {
       setCovers({});
@@ -54,17 +54,17 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
     }
 
     const initial: Record<string, string> = {};
-    const pending: Array<{id: string; url: string; lang?: string}> = [];
+    const pending: Array<{ id: string; url: string; lang?: string }> = [];
 
     entries.forEach(entry => {
       if (entry.cover) {
         initial[entry.id] = entry.cover;
       } else {
-        pending.push({id: entry.id, url: entry.url, lang: entry.lang});
+        pending.push({ id: entry.id, url: entry.url, lang: entry.lang });
       }
     });
 
-    setCovers(prev => ({...initial, ...prev}));
+    setCovers(prev => ({ ...initial, ...prev }));
 
     if (!pending.length) {
       return;
@@ -78,11 +78,11 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
         pending.map(async item => {
           try {
             const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(item.url)}`;
-            const response = await fetch(oembedUrl, {signal: controller.signal});
+            const response = await fetch(oembedUrl, { signal: controller.signal });
             if (!response.ok) {
               return null;
             }
-            const data = (await response.json()) as {thumbnail_url?: string | null};
+            const data = (await response.json()) as { thumbnail_url?: string | null };
             const thumbnail = typeof data?.thumbnail_url === 'string' ? data.thumbnail_url : null;
             return thumbnail ? [item.id, thumbnail] : null;
           } catch {
@@ -96,7 +96,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
       }
 
       setCovers(prev => {
-        const next = {...prev};
+        const next = { ...prev };
         for (const result of results) {
           if (!result) continue;
           const [id, url] = result;
@@ -119,7 +119,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
     updateScrollState();
 
     const handleScroll = () => updateScrollState();
-    container.addEventListener('scroll', handleScroll, {passive: true});
+    container.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
 
     return () => {
@@ -151,7 +151,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
         <button
           type="button"
           onClick={() => scrollByDirection('prev')}
-          className="hidden h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg text-white transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:pointer-events-none disabled:opacity-30 md:flex"
+          className="hidden h-10 w-10 items-center justify-center rounded-full bg-cj-surface text-lg text-white transition hover:bg-cj-border focus:outline-none focus:ring-2 focus:ring-cj-textSoft disabled:pointer-events-none disabled:opacity-30 md:flex"
           aria-label={t('prev')}
           disabled={!canScrollLeft}
         >
@@ -168,7 +168,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
             }
             const cover = video.cover ?? covers[videoId];
             const title = video.title ?? `TikTok video ${videoId}`;
-            const ariaLabel = t('watchAria', {title});
+            const ariaLabel = t('watchAria', { title });
 
             return (
               <article key={videoId} className="snap-center">
@@ -179,7 +179,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
                   className="group flex w-[260px] flex-col gap-3 sm:w-[300px]"
                   aria-label={ariaLabel}
                 >
-                  <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-black/40">
+                  <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl bg-cj-surface">
                     {cover ? (
                       <Image
                         src={cover}
@@ -190,7 +190,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
                         unoptimized
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-white/10 text-sm text-white/60">
+                      <div className="flex h-full w-full items-center justify-center bg-cj-surface text-sm text-cj-textMuted">
                         {t('coverUnavailable')}
                       </div>
                     )}
@@ -200,7 +200,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
                       </span>
                     </div>
                   </div>
-                  <span className="text-center text-sm font-medium text-amber-400 underline-offset-4 transition group-hover:text-amber-300 group-hover:underline">
+                  <span className="text-center text-sm font-medium text-cj-accent underline-offset-4 transition group-hover:text-cj-textSoft group-hover:underline">
                     {t('watchOn')}
                   </span>
                 </a>
@@ -211,7 +211,7 @@ export default function TikTokCarousel({videos}: TikTokCarouselProps) {
         <button
           type="button"
           onClick={() => scrollByDirection('next')}
-          className="hidden h-10 w-10 items-center justify-center rounded-full bg-white/10 text-lg text-white transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:pointer-events-none disabled:opacity-30 md:flex"
+          className="hidden h-10 w-10 items-center justify-center rounded-full bg-cj-surface text-lg text-white transition hover:bg-cj-border focus:outline-none focus:ring-2 focus:ring-cj-textSoft disabled:pointer-events-none disabled:opacity-30 md:flex"
           aria-label={t('next')}
           disabled={!canScrollRight}
         >

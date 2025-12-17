@@ -40,9 +40,9 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
   return (
     <div className="mx-auto w-full max-w-4xl space-y-10 px-4 py-12">
       <header className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Livro</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Livro</p>
         <h1 className="text-3xl font-semibold">Clamor por Justiça e Liberdade</h1>
-        <h2 className="text-xl font-medium text-[var(--accent-soft)]">
+        <h2 className="text-xl font-medium text-cj-textSoft">
           Um livro entre o grito, a memória e a responsabilidade.
         </h2>
       </header>
@@ -50,7 +50,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
       <section className="section-card rounded-3xl p-6 lg:p-8">
         <h2 className="mb-6 text-2xl font-semibold">Apresentação</h2>
         <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
-          <div className="space-y-4 text-base leading-relaxed text-muted">
+          <div className="space-y-4 text-base leading-relaxed text-cj-textMuted">
             <p>
               O resumo deste livro começa pela sua própria introdução. <br />
               “Clamor por Justiça e Liberdade” ainda está no prelo, mas já nasce com uma certeza: embora pareça um tema
@@ -67,7 +67,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
               Este livro reúne eco, memória, profecia e consciência. É o reencontro entre o jovem que protestou em 1992 e o
               adulto que, em 2025, olha para a realidade e afirma: a luta ainda está viva, e vale a pena continuar.
             </p>
-            <p className="font-medium text-[var(--page-text)]">
+            <p className="font-medium text-cj-text">
               Não é um livro escrito por mágoa. <br /> É um livro escrito por responsabilidade.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
                 sizes="(max-width: 1024px) 100vw, 33vw"
               />
             </div>
-            <p className="text-xs italic leading-relaxed text-muted opacity-80">
+            <p className="text-xs italic leading-relaxed text-cj-textMuted opacity-80">
               Capa do livro “Clamor por Justiça e Liberdade” (Cry for Justice and Freedom), obra em prelo de Capí Joy sobre justiça, liberdade, dignidade e o peso responsável de não se calar diante do que precisa mudar.
             </p>
           </div>
@@ -91,16 +91,16 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
       <section className="section-card space-y-4 rounded-3xl p-6">
         <h2 className="text-2xl font-semibold">Contexto Histórico</h2>
         <ul className="space-y-3">
-          <li className="flex gap-3 text-sm text-muted">
-            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--accent)]" />
+          <li className="flex gap-3 text-sm text-cj-textMuted">
+            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-cj-accent" />
             <span>Carta aberta ao povo de Porto Alegre (1992) como ponto de partida.</span>
           </li>
-          <li className="flex gap-3 text-sm text-muted">
-            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--accent)]" />
+          <li className="flex gap-3 text-sm text-cj-textMuted">
+            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-cj-accent" />
             <span>A constatação de que estruturas mudam lentamente, mas a fome por justiça permanece.</span>
           </li>
-          <li className="flex gap-3 text-sm text-muted">
-            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--accent)]" />
+          <li className="flex gap-3 text-sm text-cj-textMuted">
+            <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-cj-accent" />
             <span>
               O olhar de 2025, mais maduro, entendendo que continuar lutando é uma escolha de consciência, não de
               orgulho.
@@ -111,10 +111,10 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
 
       <section className="section-card space-y-3 rounded-3xl p-6">
         <h2 className="text-2xl font-semibold">Estrutura do livro</h2>
-        <p className="text-sm text-muted">Títulos sugeridos — revelar aos poucos para manter curiosidade.</p>
+        <p className="text-sm text-cj-textMuted">Títulos sugeridos — revelar aos poucos para manter curiosidade.</p>
         <div className="grid gap-2 md:grid-cols-2">
           {CHAPTERS.map(chapter => (
-            <div key={chapter} className="rounded-2xl bg-black/15 px-4 py-3 text-sm text-muted">
+            <div key={chapter} className="rounded-2xl bg-cj-surface px-4 py-3 text-sm text-cj-textMuted">
               {chapter}
             </div>
           ))}
@@ -123,7 +123,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
 
       <section className="section-card space-y-3 rounded-3xl p-6">
         <h2 className="text-2xl font-semibold">Spoiler exclusivo</h2>
-        <p className="text-sm text-muted">
+        <p className="text-sm text-cj-textMuted">
           “Tudo começou quando percebi que havia coisas dentro de mim que não podiam mais ficar caladas. O silêncio
           estava doendo. A verdade começou a gritar — não contra pessoas, mas contra as prisões invisíveis da alma. Eu
           entendi que Deus não quer filhos acorrentados. Ele quer filhos livres. E liberdade começa com coragem.”
@@ -132,7 +132,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
 
       <section className="section-card space-y-3 rounded-3xl p-6">
         <h2 className="text-2xl font-semibold">Para quem é este livro?</h2>
-        <ul className="space-y-2 text-sm text-muted">
+        <ul className="space-y-2 text-sm text-cj-textMuted">
           <li>• Para quem sente peso no peito.</li>
           <li>• Para quem busca respostas e não suporta mais silêncio.</li>
           <li>• Para quem quer reencontrar paz no meio da bagunça da vida.</li>
@@ -141,7 +141,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
         <div className="flex flex-wrap gap-3">
           <Link
             href={`/${locale}/contato#captura`}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-[rgba(216,122,42,0.35)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-soft)]"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
           >
             Quero receber um trecho
           </Link>
@@ -152,7 +152,7 @@ export default async function LivroPage({ params }: { params: Promise<Params> })
             Press kit / releases
           </Link>
         </div>
-        <p className="text-xs text-muted">
+        <p className="text-xs text-cj-textMuted">
           Lead obrigatório: e-mail e nome antes de qualquer download. PDF não abre direto para garantir captação de
           contato.
         </p>

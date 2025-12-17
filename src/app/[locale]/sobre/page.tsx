@@ -33,22 +33,22 @@ export default async function AboutPage({ params }: { params: Promise<Params> })
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-10 px-4 py-12">
-      <section className="gap-6 rounded-3xl bg-black/40 p-8 shadow-xl shadow-black/30 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <section className="gap-6 rounded-3xl bg-cj-surface p-8 shadow-xl shadow-black/50 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Sobre Capí Joy</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Sobre Capí Joy</p>
           <h1 className="text-3xl font-semibold">Arte que nasce do real</h1>
-          <p className="text-base text-muted">
+          <p className="text-base text-cj-textMuted">
             Capí Joy é compositor, escritor e artista independente. Sua arte nasce de experiências profundas: perdas,
             recomeços, fé prática e a busca insistente por liberdade e paz. Cada música e cada texto são verdadeiros,
             íntimos e feitos para tocar quem precisa de força e direção.
           </p>
-          <p className="text-base text-muted">
+          <p className="text-base text-cj-textMuted">
             Sua trajetória não é sobre fama, mas sobre ser útil: “Se algo que escrevo tocar uma pessoa, já valeu”.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
               href={`/${locale}/musicas`}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-[rgba(216,122,42,0.35)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-soft)]"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
             >
               Discografia
             </Link>
@@ -74,22 +74,22 @@ export default async function AboutPage({ params }: { params: Promise<Params> })
 
       <section className="grid gap-6 md:grid-cols-2">
         <div className="section-card rounded-3xl p-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Música</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Música</p>
           <h2 className="mt-2 text-2xl font-semibold">BASTA e ALELUIA</h2>
-          <p className="mt-3 text-sm text-muted">
+          <p className="mt-3 text-sm text-cj-textMuted">
             BASTA é um grito de alma — protesto espiritual, coragem e verdade. ALELUIA é leveza e louvor íntimo para
             momentos de fé e descanso. Ambas estão nas plataformas e fazem parte de um palco pensado para ser
             cinematográfico, íntimo e intenso.
           </p>
-          <ul className="mt-3 space-y-2 text-sm text-muted">
+          <ul className="mt-3 space-y-2 text-sm text-cj-textMuted">
             <li>• Versão em inglês de BASTA em produção.</li>
             <li>• Futuras reflexões musicadas e séries temáticas.</li>
           </ul>
         </div>
         <div className="section-card rounded-3xl p-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Palavra & Espiritualidade</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Palavra & Espiritualidade</p>
           <h2 className="mt-2 text-2xl font-semibold">Espiritualidade simples</h2>
-          <p className="mt-3 text-sm text-muted">
+          <p className="mt-3 text-sm text-cj-textMuted">
             Capí escreve reflexões e mensagens espirituais de forma humana e acessível. O objetivo é ajudar pessoas a
             encontrarem clareza, sentido e paz — sem religiosidade pesada, com verdade prática e fé viva.
           </p>
@@ -97,31 +97,31 @@ export default async function AboutPage({ params }: { params: Promise<Params> })
       </section>
 
       <section className="section-card space-y-4 rounded-3xl p-7">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Projetos atuais</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Projetos atuais</p>
         <div className="grid gap-3 md:grid-cols-2">
-          <div className="rounded-2xl bg-black/20 p-4">
+          <div className="rounded-2xl bg-white/5 p-4">
             <h3 className="text-lg font-semibold">Clamor por Justiça e Liberdade</h3>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-cj-textMuted">
               Livro sobre liberdade interna, paz como fundamento, cura emocional e espiritualidade prática. Inclui
               spoiler do capítulo 1 e lead capture antes do download.
             </p>
           </div>
-          <div className="rounded-2xl bg-black/20 p-4">
+          <div className="rounded-2xl bg-white/5 p-4">
             <h3 className="text-lg font-semibold">O Retorno — Uma história que não deveria ter sido contada</h3>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-cj-textMuted">
               Projeto narrativo intenso, real e transformador. Transparência e coragem para provar que até as histórias
               difíceis podem inspirar.
             </p>
           </div>
-          <div className="rounded-2xl bg-black/20 p-4">
+          <div className="rounded-2xl bg-white/5 p-4">
             <h3 className="text-lg font-semibold">Séries espirituais</h3>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-cj-textMuted">
               Conteúdos espirituais para jovens e adultos, com foco em liberdade, paz e relacionamentos.
             </p>
           </div>
-          <div className="rounded-2xl bg-black/20 p-4">
+          <div className="rounded-2xl bg-white/5 p-4">
             <h3 className="text-lg font-semibold">Press Kit / Media</h3>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-cj-textMuted">
               Biografias curta e longa, logos, fotos oficiais e releases das músicas para imprensa e produtores.
             </p>
           </div>
@@ -129,13 +129,13 @@ export default async function AboutPage({ params }: { params: Promise<Params> })
         <div className="flex flex-wrap gap-3">
           <Link
             href={`/${locale}/press-kit`}
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-[rgba(216,122,42,0.35)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-soft)]"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
           >
             Abrir press kit
           </Link>
           <Link
             href={`/${locale}/ia`}
-            className="text-sm font-semibold underline decoration-[var(--accent-soft)] underline-offset-8"
+            className="text-sm font-semibold underline decoration-cj-accent underline-offset-8"
           >
             Página para IA entender quem é Capí Joy
           </Link>

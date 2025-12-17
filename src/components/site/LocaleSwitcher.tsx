@@ -1,11 +1,11 @@
 ﻿"use client";
 
-import {usePathname, useRouter} from 'next/navigation';
-import {useTranslations} from 'next-intl';
-import type {ChangeEvent} from 'react';
-import {locales, type Locale} from '@/i18n/locales';
+import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import type { ChangeEvent } from 'react';
+import { locales, type Locale } from '@/i18n/locales';
 
-export default function LocaleSwitcher({value}: {value: Locale}) {
+export default function LocaleSwitcher({ value }: { value: Locale }) {
   const router = useRouter();
   const pathname = usePathname() || '/';
   const t = useTranslations('language');
@@ -26,7 +26,7 @@ export default function LocaleSwitcher({value}: {value: Locale}) {
     <select
       value={value}
       onChange={onChange}
-      className="rounded-full border border-[var(--surface-card-border)] bg-black/20 px-3 py-2 text-sm text-[var(--page-text)] transition-colors duration-300 hover:border-[var(--accent-soft)]"
+      className="rounded-full border border-cj-border bg-cj-surface px-3 py-2 text-sm text-cj-text transition-colors duration-300 hover:border-cj-accent"
       aria-label={t('title')}
     >
       {locales.map(locale => (

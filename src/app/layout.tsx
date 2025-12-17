@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
-import type {Metadata} from 'next';
-import type {ReactNode} from 'react';
-import {getSiteBaseUrl} from '@/lib/urls';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import { getSiteBaseUrl } from '@/lib/urls';
 
 export const metadata: Metadata = {
   title: 'Capí Joy — música, palavra e verdade que transformam',
@@ -15,10 +15,10 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({children}: {children: ReactNode}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt" suppressHydrationWarning>
-      <body className="min-h-dvh bg-[var(--page-bg)] text-[var(--page-text)] antialiased transition-colors">
+      <body className="min-h-dvh bg-cj-bg text-cj-text antialiased transition-colors">
         {children}
       </body>
     </html>

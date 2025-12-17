@@ -22,7 +22,7 @@ export default function SectionSeparator({ variant = 'default', className }: Sec
 
 function MusicVariant() {
     return (
-        <div className="flex items-center gap-1 text-[var(--accent)] h-12">
+        <div className="flex items-center gap-1 text-cj-accent h-12">
             {[...Array(20)].map((_, i) => (
                 <div
                     key={i}
@@ -43,7 +43,7 @@ function LifeVariant() {
     return (
         <div className="relative w-full max-w-lg h-24 flex items-center justify-center">
             {/* EKG / Heartbeat Line SVG */}
-            <svg viewBox="0 0 500 100" className="w-full h-full stroke-[var(--accent)] fill-none overflow-visible">
+            <svg viewBox="0 0 500 100" className="w-full h-full stroke-cj-accent fill-none overflow-visible">
                 <path
                     d="M0,50 L200,50 L210,50 L215,20 L225,80 L235,50 L245,50 L250,50 L300,50"
                     strokeWidth="2"
@@ -56,8 +56,7 @@ function LifeVariant() {
                     strokeWidth="3"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="animate-ekg-path stroke-[var(--accent)]"
-                    style={{ filter: 'drop-shadow(0 0 8px var(--accent))' }}
+                    className="animate-ekg-path stroke-cj-accent"
                 />
             </svg>
         </div>
@@ -66,7 +65,7 @@ function LifeVariant() {
 
 function BookVariant() {
     return (
-        <div className="flex items-center gap-4 text-[var(--accent)] opacity-80">
+        <div className="flex items-center gap-4 text-cj-accent opacity-80">
             <div className="h-[1px] w-24 bg-gradient-to-r from-transparent to-current" />
             <FaPenNib className="text-xl animate-pulse" />
             <div className="h-[1px] w-24 bg-gradient-to-l from-transparent to-current" />
@@ -76,7 +75,7 @@ function BookVariant() {
 
 function SocialVariant() {
     return (
-        <div className="flex gap-3 text-[var(--accent)]">
+        <div className="flex gap-3 text-cj-accent">
             {[...Array(5)].map((_, i) => (
                 <div
                     key={i}

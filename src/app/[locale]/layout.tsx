@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { locales, type Locale, defaultLocale } from '@/i18n/locales';
 import Navbar from '@/components/site/Navbar';
 import Footer from '@/components/site/Footer';
-import { ThemeProvider } from '@/components/providers/theme-provider';
+
 
 import JsonLdPerson from '@/components/seo/JsonLdPerson';
 import FloatingWhatsapp from '@/components/site/FloatingWhatsapp';
@@ -28,16 +28,16 @@ export default async function LocaleLayout({
   const safeLocale = locale ?? defaultLocale;
 
   return (
-    <ThemeProvider>
+
+    <NextIntlClientProvider locale={safeLocale} messages={messages}>
       <JsonLdPerson />
-      <NextIntlClientProvider locale={safeLocale} messages={messages}>
-        <div className="flex min-h-dvh flex-col">
-          <Navbar locale={safeLocale} />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <FloatingWhatsapp />
-        </div>
-      </NextIntlClientProvider>
-    </ThemeProvider>
+      <div className="flex min-h-dvh flex-col">
+        <Navbar locale={safeLocale} />
+        <main className="flex-1">{children}</main>
+        <Footer />
+        <FloatingWhatsapp />
+      </div>
+    </NextIntlClientProvider>
+
   );
 }

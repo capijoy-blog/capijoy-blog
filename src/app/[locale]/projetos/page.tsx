@@ -55,11 +55,11 @@ const PROJECTS: Project[] = [
 function statusColor(status: Project['status']) {
   switch (status) {
     case 'ativo':
-      return 'bg-emerald-500 text-black';
+      return 'bg-white text-black border border-white';
     case 'pronto para lançar':
-      return 'bg-amber-400 text-black';
+      return 'bg-cj-textSoft text-black border border-cj-textSoft';
     default:
-      return 'bg-neutral-700 text-white';
+      return 'bg-cj-surface text-cj-textMuted border border-cj-border';
   }
 }
 
@@ -83,9 +83,9 @@ export default async function ProjetosPage({ params }: { params: Promise<Params>
   return (
     <div className="mx-auto w-full max-w-5xl space-y-8 px-4 py-12">
       <header className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Projetos</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Projetos</p>
         <h1 className="text-3xl font-semibold">Lista oficial de ajustes e entregas</h1>
-        <p className="max-w-3xl text-base text-muted">
+        <p className="max-w-3xl text-base text-cj-textMuted">
           Tudo que está sendo construído para Capí Joy: músicas, livro, narrativas, conferências e materiais para IA,
           imprensa e produtores.
         </p>
@@ -100,17 +100,17 @@ export default async function ProjetosPage({ params }: { params: Promise<Params>
                 {project.status}
               </span>
             </div>
-            <p className="mt-2 text-sm text-muted">{project.description}</p>
-            <p className="mt-1 text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">{project.focus}</p>
+            <p className="mt-2 text-sm text-cj-textMuted">{project.description}</p>
+            <p className="mt-1 text-xs uppercase tracking-[0.2em] text-cj-accent">{project.focus}</p>
           </article>
         ))}
       </div>
 
       <section className="space-y-6 py-8">
         <header className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Palestras</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Palestras</p>
           <h2 className="text-2xl font-semibold">Mensagens e temas de palco</h2>
-          <p className="max-w-3xl text-sm text-muted">
+          <p className="max-w-3xl text-sm text-cj-textMuted">
             Conteúdo profundo para conferências, eventos e imersões. Cada mensagem é uma experiência de palavra, música e
             espiritualidade prática.
           </p>
@@ -119,14 +119,14 @@ export default async function ProjetosPage({ params }: { params: Promise<Params>
           {EXPERIENCES_CONFERENCE_TOPICS.map(topic => (
             <article key={topic.slug} className="section-card flex flex-col gap-4 rounded-3xl p-6 sm:p-8">
               <div>
-                <h3 className="text-xl font-semibold text-[var(--page-text)] md:text-2xl">{topic.title}</h3>
+                <h3 className="text-xl font-semibold text-cj-text md:text-2xl">{topic.title}</h3>
                 {topic.theme && (
-                  <p className="mt-1 text-sm font-medium uppercase tracking-wide text-[var(--accent-soft)]">
+                  <p className="mt-1 text-sm font-medium uppercase tracking-wide text-cj-accent">
                     {topic.theme}
                   </p>
                 )}
               </div>
-              <div className="text-base leading-relaxed text-muted whitespace-pre-line">
+              <div className="text-base leading-relaxed text-cj-textMuted whitespace-pre-line">
                 {topic.fullSummary.split('\n').map((paragraph, index) => (
                   <p key={index} className="mb-4 last:mb-0">{paragraph}</p>
                 ))}
