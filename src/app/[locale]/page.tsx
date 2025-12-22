@@ -212,22 +212,22 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
   return (
     <>
-      <section id="topo" className="hero-animated-bg relative isolate flex min-h-[85vh] w-full flex-col justify-center overflow-hidden lg:flex-row lg:items-center">
+      <section id="topo" className="hero-animated-bg relative isolate flex min-h-[85vh] w-full flex-row flex-wrap items-start justify-between overflow-hidden md:flex-col md:flex-nowrap md:justify-center lg:flex-row lg:justify-center lg:items-center pt-12 md:pt-0">
         {/* Background Graphic/Gradient - Handled by hero-animated-bg class */}
 
 
         {/* Content Side (Left) */}
-        <div className="relative z-10 flex w-full items-center justify-start px-4 py-12 sm:px-6 lg:w-1/2 lg:py-20 lg:pl-20">
+        <div className="relative z-10 flex w-[60%] items-center justify-start px-4 py-2 sm:px-6 md:w-full lg:w-1/2 lg:py-20 lg:pl-32 lg:justify-start">
           <div className="max-w-xl space-y-8">
 
             <h1 className="text-4xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl">
               Capí Joy <br /> <span className="italic">Voz</span>, Verdade <br /> e Liberdade
             </h1>
-            <p className="max-w-lg text-lg leading-relaxed text-gray-300">
+            <p className="hidden max-w-lg text-lg leading-relaxed text-gray-300 md:block">
               Música, palavra e mensagem para despertar a alma. Canções, livros e reflexões que nasceram da vida real,
               de dores, fé, quedas e recomeços.
             </p>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="hidden flex-wrap items-center gap-4 md:flex">
               <Link
                 href="https://www.youtube-nocookie.com/watch?v=6EVY-Ef8GRY"
                 target="_blank"
@@ -243,7 +243,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
                 Ouvir ALELUIA
               </Link>
             </div>
-            <div className="pt-2">
+            <div className="hidden pt-2 md:block">
               <Link
                 href={`/${locale}/livro`}
                 className="inline-flex items-center gap-2 text-sm font-semibold text-cj-accent underline decoration-white/20 underline-offset-8 transition hover:text-white"
@@ -255,24 +255,56 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
         </div>
 
         {/* Image Side (Right) */}
-        <div className="relative h-[50vh] w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2">
+        <div className="relative h-[40vh] w-[38%] md:order-last md:h-[50vh] md:w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2 lg:order-none">
           <Image
             src="/assets/hero-image-capi-joy.webp"
             alt="Capí Joy"
             fill
             priority
-            className="object-contain object-bottom"
+            className="object-contain object-top lg:object-bottom"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
           {/* Requested Gradient: Degrade com opacidade na parte de embaixo */}
           <div className="absolute inset-x-0 bottom-0 h-48" />
+        </div>
+
+        {/* Mobile Content (Below Image) */}
+        <div className="relative z-10 flex w-full flex-col items-start gap-6 px-4 pb-12 md:hidden">
+          <p className="max-w-lg text-lg leading-relaxed text-gray-300">
+            Música, palavra e mensagem para despertar a alma. Canções, livros e reflexões que nasceram da vida real,
+            de dores, fé, quedas e recomeços.
+          </p>
+          <div className="flex flex-col w-full gap-4 sm:flex-row sm:items-center">
+            <Link
+              href="https://www.youtube-nocookie.com/watch?v=6EVY-Ef8GRY"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full justify-center items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-black shadow-xl shadow-white/10 transition hover:scale-105 hover:bg-cj-textSoft hover:shadow-2xl sm:w-auto"
+            >
+              <FaPlay aria-hidden /> Ouvir BASTA
+            </Link>
+            <Link
+              href={`/${locale}/musicas#aleluia`}
+              className="inline-flex w-full justify-center items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:w-auto"
+            >
+              Ouvir ALELUIA
+            </Link>
+          </div>
+          <div className="pt-2">
+            <Link
+              href={`/${locale}/livro`}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-cj-accent underline decoration-white/20 underline-offset-8 transition hover:text-white"
+            >
+              <FaBookOpen aria-hidden /> Clamor por Justiça e Liberdade
+            </Link>
+          </div>
         </div>
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-12">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {PILLARS.map(pillar => (
-            <div key={pillar.title} className="section-card rounded-2xl px-4 py-5">
+            <div key={pillar.title} className="section-card rounded-2xl px-4 py-5 bg-zinc-900 hover:bg-zinc-800 transition-colors">
               <p className="text-xs uppercase tracking-[0.15em] text-cj-accent">{pillar.title}</p>
               <p className="mt-2 text-sm text-cj-textMuted">{pillar.text}</p>
             </div>
