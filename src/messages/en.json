@@ -83,5 +83,37 @@
     "notAvailableTitle": "Post unavailable",
     "notAvailableDescription": "This post is no longer available.",
     "fallbackDescription": "Read \"{title}\" and explore exclusive reflections on the Capí Joy blog."
+  },
+  "musicas": {
+    "appleCard": {
+      "tag": "Streaming • Connection • Apple Music",
+      "title": "For those who listen on Apple Music",
+      "description": "We are connected there too! Follow my profile and let's go together on this journey of music and faith.",
+      "cta": "Follow on Apple Music",
+      "secondary": "View discography"
+    },
+    "songs": {
+      "basta": {
+        "tag": "Spiritual Protest",
+        "description": "A cry from the soul, courage, and change. A call to awaken and return to principles that heal.",
+        "lyrics": "A definitive 'enough' to everything that attempts to silence our essence. We accept nothing less than the truth. Freedom and peace are not mere distant dreams; they are our real destiny."
+      },
+      "aleluia": {
+        "tag": "Intimate Praise",
+        "description": "A spiritual song, light and true for moments of faith and rest. Perfect for those who need to breathe.",
+        "lyrics": ""
+      }
+    }
+  },
+  "projetos": {
+    "header": {
+      "title": "Projects & Expansion",
+      "description": "Capí Joy's creative ecosystem. Explore the fronts that unite music, literature, conferences, and digital innovation to take our message to the world."
+    },
+    "lectures": {
+      "tag": "Speaking",
+      "title": "Messages and Speaking Topics",
+      "description": "Deep content for conferences, events, and immersions. Each message is an experience of words, music, and practical spirituality."
+    }
   }
 }

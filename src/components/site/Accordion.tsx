@@ -28,10 +28,10 @@ export default function Accordion({ title, children, defaultOpen = false }: Prop
         />
       </button>
       <div
-        className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${open ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
           }`}
       >
-        <div className="overflow-hidden px-4 pb-4 text-sm leading-relaxed text-cj-textMuted">{children}</div>
+        <div className="px-4 pb-4 text-sm leading-relaxed text-cj-textMuted">{children}</div>
       </div>
     </div>
   );

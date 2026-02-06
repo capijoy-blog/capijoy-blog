@@ -28,7 +28,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              WhatsApp
+              WhatsApp +55 37 99876-5452
             </Link>
           </div>
           <p className="text-xs text-cj-textMuted">© Capí Joy 2025. Voz, verdade e liberdade.</p>

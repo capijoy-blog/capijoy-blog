@@ -1,6 +1,7 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaArrowRight, FaBookOpen, FaPlay, FaSpotify, FaYoutube } from 'react-icons/fa6';
+import { FaArrowRight, FaBookOpen, FaPlay, FaSpotify, FaYoutube, FaApple } from 'react-icons/fa6';
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 
@@ -11,56 +12,7 @@ import SectionSeparator from '@/components/site/SectionSeparator';
 import type { Locale } from '@/i18n/locales';
 import { absoluteUrl } from '@/lib/urls';
 
-const FEATURE_CARDS = [
-  {
-    title: 'BASTA',
-    tag: 'Single • Protesto espiritual',
-    description:
-      'Uma canção de protesto e coragem. É o grito da alma por justiça, liberdade e retorno aos princípios que nos levantam.',
-    image: '/assets/capa_basta.webp',
-    primary: {
-      label: 'Assista ao clipe',
-      href: 'https://www.youtube-nocookie.com/watch?v=6EVY-Ef8GRY',
-      Icon: FaYoutube
-    },
-    secondary: {
-      label: 'Letra e bastidores',
-      href: '/musicas#basta'
-    }
-  },
-  {
-    title: 'ALELUIA',
-    tag: 'Single • Louvor íntimo',
-    description:
-      'Uma oração em forma de melodia. Leve, espiritual e verdadeira para quem precisa respirar fé e descanso.',
-    image: '/assets/capi-joy-apple-music.webp',
-    primary: {
-      label: 'Ouvir agora',
-      href: 'https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI',
-      Icon: FaSpotify
-    },
-    secondary: {
-      label: 'Ver detalhes',
-      href: '/musicas#aleluia'
-    }
-  },
-  {
-    title: 'Clamor por Justiça e Liberdade',
-    tag: 'Livro • Mensagem central',
-    description:
-      'Nasceu das madrugadas, das feridas e da fé que insiste. Um chamado para viver liberdade e paz por dentro.',
-    image: '/assets/background-music.webp',
-    primary: {
-      label: 'Ler sobre o livro',
-      href: '/livro',
-      Icon: FaBookOpen
-    },
-    secondary: {
-      label: 'Capturar leads',
-      href: '/contato#captura'
-    }
-  }
-] as const;
+import { getExperienceTopics } from '@/data/experiences';
 
 const PILLARS = [
   { title: 'Liberdade', text: 'Viver sem correntes invisíveis. Gritar basta quando algo rouba a alma.' },
@@ -69,8 +21,6 @@ const PILLARS = [
   { title: 'Fé prática', text: 'Espiritualidade simples, humana e viva. Deus presente na vida real.' },
   { title: 'Propósito', text: 'Arte para ser útil. Música, texto e palavra para levantar quem caiu.' }
 ];
-
-import { EXPERIENCES_CONFERENCE_TOPICS } from '@/data/experiences';
 
 const FAQ_QUESTIONS = [
   {
@@ -201,6 +151,74 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   const tiktokT = await getTranslations({ locale, namespace: 'tiktok' });
+  const tMusic = await getTranslations({ locale, namespace: 'musicas' });
+  const topics = getExperienceTopics(locale);
+
+  const FEATURE_CARDS = [
+    {
+      title: 'BASTA',
+      tag: 'Single • Protesto espiritual • YouTube',
+      description:
+        'Uma canção de protesto e coragem. É o grito da alma por justiça, liberdade e retorno aos princípios que nos levantam.',
+      image: '/assets/capa_basta.webp',
+      primary: {
+        label: 'Assista ao clipe',
+        href: 'https://www.youtube.com/watch?v=6EVY-Ef8GRY',
+        Icon: FaYoutube
+      },
+      secondary: {
+        label: 'Letra e bastidores',
+        href: '/musicas#basta'
+      }
+    },
+    {
+      title: 'ALELUIA',
+      tag: 'Single • Louvor íntimo • Spotify',
+      description:
+        'Uma oração em forma de melodia. Leve, espiritual e verdadeira para quem precisa respirar fé e descanso.',
+      image: '/assets/capi-joy-spotify.webp',
+      primary: {
+        label: 'Ouvir agora',
+        href: 'https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI',
+        Icon: FaSpotify
+      },
+      secondary: {
+        label: 'Ver detalhes',
+        href: '/musicas#aleluia'
+      }
+    },
+    {
+      title: 'Clamor por Justiça e Liberdade',
+      tag: 'Livro • Mensagem central',
+      description:
+        'Nasceu das madrugadas, das feridas e da fé que insiste. Um chamado para viver liberdade e paz por dentro.',
+      image: '/assets/banner-capi-joy-livro.webp',
+      primary: {
+        label: 'Ler sobre o livro',
+        href: '/livro',
+        Icon: FaBookOpen
+      },
+      secondary: {
+        label: 'Capturar leads',
+        href: '/contato#captura'
+      }
+    },
+    {
+      title: tMusic('appleCard.title'),
+      tag: tMusic('appleCard.tag'),
+      description: tMusic('appleCard.description'),
+      image: '/assets/capi-joy-apple-music.webp',
+      primary: {
+        label: tMusic('appleCard.cta'),
+        href: 'https://music.apple.com/br/artist/cap%C3%AD-joy/1831439555',
+        Icon: FaApple
+      },
+      secondary: {
+        label: tMusic('appleCard.secondary'),
+        href: '/musicas'
+      }
+    }
+  ] as const;
 
   const fallbackTitles: Record<TikTokFallbackKey, string> = {
     basta: tiktokT('fallback.basta'),
@@ -332,7 +350,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
             <FaArrowRight aria-hidden />
           </Link>
         </div>
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2">
           {FEATURE_CARDS.map(card => (
             <article key={card.title} className="section-card flex flex-col overflow-hidden rounded-3xl">
               <div className="relative aspect-[16/10] w-full overflow-hidden">
@@ -430,7 +448,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          {EXPERIENCES_CONFERENCE_TOPICS.map(topic => (
+          {topics.map(topic => (
             <div key={topic.slug} className="section-card flex flex-col gap-2 rounded-2xl px-5 py-5">
               <h3 className="text-lg font-semibold leading-tight text-cj-text">{topic.title}</h3>
               {topic.theme && (

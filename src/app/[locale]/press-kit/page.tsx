@@ -97,6 +97,14 @@ export default async function PressKitPage({ params }: { params: Promise<Params>
             Instagram
           </Link>
           <Link
+            href="https://music.apple.com/br/artist/cap%C3%AD-joy/1831439555"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-2xl bg-cj-surface px-4 py-3 text-sm font-semibold text-cj-textMuted hover:text-cj-accent"
+          >
+            Apple Music
+          </Link>
+          <Link
             href="mailto:contato@capijoy.com.br"
             className="rounded-2xl bg-cj-surface px-4 py-3 text-sm font-semibold text-cj-textMuted hover:text-cj-accent"
           >

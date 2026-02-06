@@ -133,12 +133,6 @@ export default async function AboutPage({ params }: { params: Promise<Params> })
           >
             Abrir press kit
           </Link>
-          <Link
-            href={`/${locale}/ia`}
-            className="text-sm font-semibold underline decoration-cj-accent underline-offset-8"
-          >
-            Página para IA entender quem é Capí Joy
-          </Link>
         </div>
       </section>
     </div>

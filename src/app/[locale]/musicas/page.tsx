@@ -1,7 +1,11 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import { FaApple } from 'react-icons/fa6';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import Accordion from '@/components/site/Accordion';
+import VideoPlayer from '@/components/site/VideoPlayer';
 import type { Locale } from '@/i18n/locales';
 import { absoluteUrl } from '@/lib/urls';
 
@@ -11,28 +15,15 @@ const SONGS = [
   {
     id: 'basta',
     title: 'BASTA',
-    tag: 'Protesto espiritual',
-    description:
-      'Grito de alma, coragem e mudança. Um chamado para despertar e retornar aos princípios que curam.',
-    video: 'https://www.youtube-nocookie.com/embed/6EVY-Ef8GRY',
-    spotifyEmbed: 'https://open.spotify.com/embed/artist/6l2XVPCSpXi3oKheB3UvKI?utm_source=generator',
-    lyrics: [
-      'Letra oficial disponível no press kit. Use este espaço para publicar a versão final sem abrir PDF direto.',
-      'Mensagem central: basta de tudo que rouba a alma. Liberdade e paz são destino.'
-    ]
+    video: 'https://www.youtube.com/watch?v=6EVY-Ef8GRY',
+    cover: '/assets/capa_basta.webp',
+    spotifyEmbed: 'https://open.spotify.com/embed/artist/6l2XVPCSpXi3oKheB3UvKI?utm_source=generator'
   },
   {
     id: 'aleluia',
     title: 'ALELUIA',
-    tag: 'Louvor íntimo',
-    description:
-      'Uma canção espiritual, leve e verdadeira para momentos de fé e descanso. Perfeita para quem precisa respirar.',
     video: null,
-    spotifyEmbed: 'https://open.spotify.com/embed/artist/6l2XVPCSpXi3oKheB3UvKI?utm_source=generator',
-    lyrics: [
-      'Letra oficial em preparação. Publicar quando estiver finalizada para manter a página sempre atualizada.',
-      'Enquanto isso, mantenha a mensagem: fé acessível, luz em meio à noite e gratidão que acalma.'
-    ]
+    spotifyEmbed: 'https://open.spotify.com/embed/artist/6l2XVPCSpXi3oKheB3UvKI?utm_source=generator'
   }
 ] as const;
 
@@ -57,6 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function MusicasPage({ params }: { params: Promise<Params> }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'musicas' });
 
   return (
     <div className="mx-auto w-full max-w-5xl space-y-10 px-4 py-12">
@@ -70,66 +62,98 @@ export default async function MusicasPage({ params }: { params: Promise<Params> 
       </header>
 
       <div className="space-y-8">
-        {SONGS.map(song => (
-          <article key={song.id} id={song.id} className="section-card overflow-hidden rounded-3xl">
-            <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-              <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-cj-accent">{song.tag}</p>
-                <h2 className="text-2xl font-semibold">{song.title}</h2>
-                <p className="text-sm text-cj-textMuted">{song.description}</p>
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
-                  >
-                    Ouvir no Spotify
-                  </Link>
-                  <Link
-                    href="https://www.youtube.com/@dicapijoy"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="surface-button rounded-full px-4 py-2 text-sm font-semibold"
-                  >
-                    YouTube
-                  </Link>
+        {SONGS.map(song => {
+          const tag = t(`songs.${song.id}.tag`);
+          const description = t(`songs.${song.id}.description`);
+          const lyrics = t(`songs.${song.id}.lyrics`);
+
+          return (
+            <article key={song.id} id={song.id} className="section-card overflow-hidden rounded-3xl">
+              <div className="grid gap-6 p-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+                <div className="space-y-3">
+                  <p className="text-xs uppercase tracking-[0.18em] text-cj-accent">{tag}</p>
+                  <h2 className="text-2xl font-semibold">{song.title}</h2>
+                  <p className="text-sm text-cj-textMuted">{description}</p>
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href="https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
+                    >
+                      Ouvir no Spotify
+                    </Link>
+                    <Link
+                      href="https://www.youtube.com/@dicapijoy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="surface-button rounded-full px-4 py-2 text-sm font-semibold"
+                    >
+                      YouTube
+                    </Link>
+                  </div>
+                  {lyrics.trim() && (
+                    <div className="mt-4 border-t border-cj-border pt-4">
+                      <div className="space-y-4 text-sm leading-relaxed text-cj-textMuted">
+                        {lyrics.split('\n').map((line, i) => (
+                          line.trim() ? <p key={i}>{line}</p> : <br key={i} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <Accordion title="Ver letra / conceito" defaultOpen={song.id === 'basta'}>
-                  {song.lyrics.map(line => (
-                    <p key={line}>{line}</p>
-                  ))}
-                </Accordion>
-              </div>
-              <div className="space-y-4">
-                {song.video ? (
+                <div className="space-y-4">
+                  {song.video ? (
+                    <VideoPlayer
+                      videoUrl={song.video}
+                      coverImage={(song as any).cover}
+                      title={`${song.title} - YouTube`}
+                    />
+                  ) : null}
                   <div className="overflow-hidden rounded-2xl">
                     <iframe
+                      src={song.spotifyEmbed}
                       width="100%"
-                      height="280"
-                      src={song.video}
-                      title={`${song.title} - YouTube`}
+                      height="200"
                       loading="lazy"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      title={`${song.title} - Spotify`}
                     />
                   </div>
-                ) : null}
-                <div className="overflow-hidden rounded-2xl">
-                  <iframe
-                    src={song.spotifyEmbed}
-                    width="100%"
-                    height="200"
-                    loading="lazy"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    title={`${song.title} - Spotify`}
-                  />
                 </div>
               </div>
+            </article>
+          );
+        })}
+
+        <article className="section-card overflow-hidden rounded-3xl">
+          <div className="grid gap-8 p-6 md:grid-cols-2 lg:items-center">
+            <div className="space-y-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-cj-accent">{t('appleCard.tag')}</p>
+              <h2 className="text-2xl font-semibold">{t('appleCard.title')}</h2>
+              <p className="text-base text-cj-textMuted">
+                {t('appleCard.description')}
+              </p>
+              <Link
+                href="https://music.apple.com/br/artist/cap%C3%AD-joy/1831439555"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
+              >
+                <FaApple className="text-xl" />
+                {t('appleCard.cta')}
+              </Link>
             </div>
-          </article>
-        ))}
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl">
+              <Image
+                src="/assets/capi-joy-apple-music.webp"
+                alt="Capí Joy na Apple Music"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </article>
       </div>
 
       <section className="section-card space-y-4 rounded-3xl p-6">

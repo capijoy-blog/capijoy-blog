@@ -83,5 +83,37 @@
     "notAvailableTitle": "Postagem indisponível",
     "notAvailableDescription": "Esta postagem não está mais disponível.",
     "fallbackDescription": "Leia \"{title}\" e descubra reflexões exclusivas no blog Capí Joy."
+  },
+  "musicas": {
+    "appleCard": {
+      "tag": "Streaming • Conexão • Apple Music",
+      "title": "Para quem curte ouvir música pela Apple Music",
+      "description": "Também estamos conectados por lá! Siga meu perfil e vamos juntos nessa jornada de música e fé.",
+      "cta": "Siga na Apple Music",
+      "secondary": "Ver discografia"
+    },
+    "songs": {
+      "basta": {
+        "tag": "Protesto espiritual",
+        "description": "Grito de alma, coragem e mudança. Um chamado para despertar e retornar aos princípios que curam.",
+        "lyrics": "Um basta definitivo a tudo aquilo que tenta silenciar nossa essência. Não aceitamos menos que a verdade. A liberdade e a paz não são apenas sonhos distantes; são o nosso destino real."
+      },
+      "aleluia": {
+        "tag": "Louvor íntimo",
+        "description": "Uma canção espiritual, leve e verdadeira para momentos de fé e descanso. Perfeita para quem precisa respirar.",
+        "lyrics": ""
+      }
+    }
+  },
+  "projetos": {
+    "header": {
+      "title": "Projetos & Expansão",
+      "description": "O ecossistema criativo de Capí Joy. Explore as frentes de atuação que unem música, literatura, conferências e inovação digital para levar nossa mensagem ao mundo."
+    },
+    "lectures": {
+      "tag": "Palestras",
+      "title": "Mensagens e temas de palco",
+      "description": "Conteúdo profundo para conferências, eventos e imersões. Cada mensagem é uma experiência de palavra, música e espiritualidade prática."
+    }
   }
 }
