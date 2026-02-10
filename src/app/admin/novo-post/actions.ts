@@ -4,6 +4,7 @@ import { createServerClient } from "@/lib/supabaseServer";
 import { slugify } from "@/lib/slugify";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { localizePath } from '@/lib/localePath';
 
 export interface CreatePostState {
   message: string;
@@ -64,6 +65,8 @@ export async function createPost(_prevState: CreatePostState, formData: FormData
 
   const now = new Date().toISOString();
   const isPublish = intent === 'publish';
+  const status = isPublish ? 'published' : 'draft';
+  const publishedAt = isPublish ? now : null;
 
   const {error: postError} = await supabase
     .from('posts')
@@ -74,8 +77,8 @@ export async function createPost(_prevState: CreatePostState, formData: FormData
         excerpt: typeof excerpt === 'string' ? excerpt : null,
         content_html: contentHtml,
         locale,
-        status: 'published',
-        published_at: now,
+        status,
+        published_at: publishedAt,
         cover_image_url: publicUrl
       }
     ]);
@@ -87,7 +90,7 @@ export async function createPost(_prevState: CreatePostState, formData: FormData
     return {message: `Failed to create post: ${postError.message}`};
   }
 
-  const blogBasePath = `/${locale}/blog`;
+  const blogBasePath = localizePath(locale, '/blog');
 
   revalidatePath('/admin');
   if (isPublish) {
@@ -96,13 +99,21 @@ export async function createPost(_prevState: CreatePostState, formData: FormData
   }
 
   try {
+    const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const authToken = serviceRole || anonKey;
+
+    if (!authToken) {
+      throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY for translate-post call');
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/translate-post`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+          Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           record: {
@@ -111,8 +122,8 @@ export async function createPost(_prevState: CreatePostState, formData: FormData
             excerpt: typeof excerpt === 'string' ? excerpt : null,
             content_html: contentHtml,
             locale,
-            status: isPublish ? 'published' : 'draft',
-            published_at: isPublish ? now : null,
+            status,
+            published_at: publishedAt,
             cover_image_url: publicUrl,
           },
         }),

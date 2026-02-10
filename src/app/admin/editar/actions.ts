@@ -184,18 +184,27 @@ export async function updatePost(postId: string, _prevState: UpdatePostState, fo
   const coverImageForTranslation = updatedCoverImageUrl !== undefined ? updatedCoverImageUrl : persistedCoverImageUrl;
 
   try {
+    const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const authToken = serviceRole || anonKey;
+
+    if (!authToken) {
+      throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY for translate-post call');
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/translate-post`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+          Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({
           record: {
             title,
             slug: sanitizedSlug,
+            original_slug: typeof originalSlug === 'string' && originalSlug ? originalSlug : sanitizedSlug,
             excerpt: typeof excerpt === 'string' ? excerpt : null,
             content_html: contentHtml,
             locale: resolvedLocale,

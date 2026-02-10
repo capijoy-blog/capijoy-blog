@@ -4,6 +4,7 @@ import { useActionState, useRef, useState, type ChangeEvent } from 'react';
 import Image from 'next/image';
 import { updatePost, type UpdatePostState } from './actions';
 import TiptapEditor from '@/components/TiptapEditor';
+import { slugify } from '@/lib/slugify';
 
 interface EditPostFormProps {
   post: {
@@ -23,6 +24,9 @@ export default function EditPostForm({ post }: EditPostFormProps) {
   const boundUpdate = updatePost.bind(null, post.id);
   const initialState: UpdatePostState = { message: '' };
   const [state, formAction] = useActionState<UpdatePostState, FormData>(boundUpdate, initialState);
+  const [title, setTitle] = useState(post.title);
+  const [slug, setSlug] = useState(post.slug);
+  const [slugTouched, setSlugTouched] = useState(post.slug !== slugify(post.title));
   const [contentHtml, setContentHtml] = useState(post.content_html);
   const [removeCoverImage, setRemoveCoverImage] = useState(false);
   const [selectedCoverImageName, setSelectedCoverImageName] = useState<string | null>(null);
@@ -45,13 +49,27 @@ export default function EditPostForm({ post }: EditPostFormProps) {
     }
   };
 
+  const handleTitleChange = (nextTitle: string) => {
+    setTitle(nextTitle);
+    if (!slugTouched) {
+      setSlug(slugify(nextTitle));
+    }
+  };
+
+  const handleSlugChange = (nextSlug: string) => {
+    setSlug(nextSlug);
+    setSlugTouched(nextSlug.trim().length > 0);
+  };
+
   return (
     <form
       action={formData => {
         formData.set('intent', intentRef.current);
+        const autoSlug = slugify(title);
+        const effectiveSlug = slug.trim() || autoSlug;
+        formData.set('slug', effectiveSlug);
         formAction(formData);
       }}
-      encType="multipart/form-data"
       className="space-y-6 max-w-3xl"
     >
       <div>
@@ -62,7 +80,8 @@ export default function EditPostForm({ post }: EditPostFormProps) {
           id="title"
           name="title"
           type="text"
-          defaultValue={post.title}
+          value={title}
+          onChange={event => handleTitleChange(event.target.value)}
           required
           className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-neutral-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-neutral-400"
         />
@@ -76,7 +95,8 @@ export default function EditPostForm({ post }: EditPostFormProps) {
           id="slug"
           name="slug"
           type="text"
-          defaultValue={post.slug}
+          value={slug}
+          onChange={event => handleSlugChange(event.target.value)}
           required
           className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-neutral-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-neutral-400"
         />

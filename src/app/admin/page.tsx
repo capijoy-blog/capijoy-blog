@@ -4,6 +4,7 @@ import {slugify} from '@/lib/slugify';
 import Link from 'next/link';
 import Image from 'next/image';
 import {Link as LocaleLink} from '@/i18n/routing';
+import { deletePostBySlug } from './actions';
 
 export default async function AdminPage() {
   const supabase = await createServerClient();
@@ -42,6 +43,7 @@ export default async function AdminPage() {
           const safeSlug = post.slug && post.slug.trim().length > 0 ? post.slug : slugify(post.title ?? '');
           const locale = post.locale ?? 'pt';
           const isDraft = (post.status ?? '').toLowerCase() !== 'published';
+          const deleteAction = deletePostBySlug.bind(null, safeSlug);
 
           return (
             <div key={post.id} className="flex flex-col overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm">
@@ -80,12 +82,19 @@ export default async function AdminPage() {
                 <div className="mt-auto flex items-center justify-between border-t border-neutral-200 pt-4">
                   <div className="flex gap-4">
                     {isDraft ? (
-                      <Link
-                        href={`/admin/editar/${safeSlug}?locale=${locale}`}
-                        className="text-indigo-600 hover:underline"
-                      >
-                        Continuar editando
-                      </Link>
+                      <>
+                        <Link
+                          href={`/admin/editar/${safeSlug}?locale=${locale}`}
+                          className="text-indigo-600 hover:underline"
+                        >
+                          Continuar editando
+                        </Link>
+                        <form action={deleteAction}>
+                          <button type="submit" className="text-red-600 hover:underline">
+                            Excluir
+                          </button>
+                        </form>
+                      </>
                     ) : (
                       <>
                         <LocaleLink
@@ -102,6 +111,11 @@ export default async function AdminPage() {
                         >
                           Editar
                         </Link>
+                        <form action={deleteAction}>
+                          <button type="submit" className="text-red-600 hover:underline">
+                            Excluir
+                          </button>
+                        </form>
                       </>
                     )}
                   </div>

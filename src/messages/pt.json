@@ -9,7 +9,9 @@
     "faq": "FAQ",
     "press": "Press Kit",
     "contact": "Contato",
-    "logoAlt": "Logotipo Capí Joy"
+    "logoAlt": "Logotipo Capí Joy",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
   },
   "language": {
     "pt": "PT",
@@ -24,7 +26,7 @@
     "system": "Sistema"
   },
   "footer": {
-    "copyright": "© Capí Joy 2025 - Todos os direitos reservados.",
+    "copyright": "\u00A9 Cap\u00ED Joy {year} \u2014 Todos os direitos reservados.",
     "tagline": "Arte que cura pela verdade.",
     "address": "Minas Gerais, Brasil",
     "socials": {

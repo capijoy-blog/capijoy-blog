@@ -3,6 +3,7 @@ import Script from 'next/script';
 import type {Metadata} from 'next';
 import {redirect} from 'next/navigation';
 import {getTranslations} from 'next-intl/server';
+import { localizePath } from '@/lib/localePath';
 
 import ShareMenu from '@/components/site/ShareMenu';
 import {supabase} from '@/lib/supabase';
@@ -56,7 +57,7 @@ export async function generateMetadata({params}: {params: Promise<Params>}): Pro
   const {locale, slug} = await params;
   const t = await getTranslations({locale, namespace: 'blogPost'});
   const post = await fetchPublishedPost(locale, slug);
-  const blogPath = `/${locale}/blog`;
+  const blogPath = localizePath(locale, '/blog');
 
   if (!post) {
     const blogUrl = absoluteUrl(blogPath);
@@ -88,7 +89,7 @@ export async function generateMetadata({params}: {params: Promise<Params>}): Pro
     };
   }
 
-  const canonicalPath = `/${locale}/blog/${slug}`;
+  const canonicalPath = localizePath(locale, `/blog/${slug}`);
   const canonicalUrl = absoluteUrl(canonicalPath);
   const description =
     post.excerpt ?? t('fallbackDescription', {title: post.title});
@@ -131,10 +132,10 @@ export default async function PostPage({params}: {params: Promise<Params>}) {
   const t = await getTranslations({locale, namespace: 'blogPost'});
 
   if (!post) {
-    redirect(`/${locale}/blog`);
+    redirect(localizePath(locale, '/blog'));
   }
 
-  const sharePath = `/${locale}/blog/${slug}`;
+  const sharePath = localizePath(locale, `/blog/${slug}`);
   const canonicalUrl = absoluteUrl(sharePath);
   const structuredData = {
     '@context': 'https://schema.org',

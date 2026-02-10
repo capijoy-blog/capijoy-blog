@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { localizePath } from '@/lib/localePath';
 
 import ShareMenu from '@/components/site/ShareMenu';
 import { supabase } from '@/lib/supabase';
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const t = await getTranslations({ locale, namespace: 'blog' });
   const title = t('meta.title');
   const description = t('meta.description');
-  const canonicalPath = `/${locale}/blog`;
+  const canonicalPath = localizePath(locale, '/blog');
   const canonicalUrl = absoluteUrl(canonicalPath);
 
   return {
@@ -125,12 +126,12 @@ export default async function BlogIndex({ params }: { params: Promise<Params> })
             )}
             <div className="flex items-center justify-between gap-3 pt-1">
               <Link
-                href={`/${locale}/blog/${post.slug}`}
+                href={localizePath(locale, `/blog/${post.slug}`)}
                 className="text-sm font-medium text-white underline underline-offset-4 hover:text-cj-accent transition-colors"
               >
                 {t('list.readPost')}
               </Link>
-              <ShareMenu url={`/${locale}/blog/${post.slug}`} title={post.title} />
+              <ShareMenu url={localizePath(locale, `/blog/${post.slug}`)} title={post.title} />
             </div>
           </div>
         </article>

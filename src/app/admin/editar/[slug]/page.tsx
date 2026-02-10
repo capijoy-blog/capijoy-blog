@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabaseServer';
 import EditPostForm from '../EditPostForm';
+import { deletePostBySlug } from '../../actions';
 
 type AdminLocale = 'pt' | 'en' | 'es';
 
@@ -73,6 +74,7 @@ export default async function EditPostPage({
     (!isAdminLocale(requestedLocale) || !postsByLocale.has(requestedLocale));
   const requestedLocaleLabel =
     requestedLocale && isAdminLocale(requestedLocale) ? LOCALE_LABEL[requestedLocale] : requestedLocale?.toUpperCase();
+  const deleteAction = deletePostBySlug.bind(null, slug);
 
   return (
     <div className="container mx-auto py-8">
@@ -80,7 +82,7 @@ export default async function EditPostPage({
         <h1 className="text-3xl font-bold">
           Editar Post: <span className="block text-xl font-semibold text-neutral-500 sm:inline sm:text-3xl sm:font-bold sm:text-neutral-900">{post.title}</span>
         </h1>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {AVAILABLE_LOCALES.map(locale => {
             const isActive = locale === resolvedLocale;
             const existForLocale = postsByLocale.has(locale);
@@ -105,6 +107,14 @@ export default async function EditPostPage({
               </span>
             );
           })}
+          <form action={deleteAction} className="ml-2">
+            <button
+              type="submit"
+              className="rounded-full border border-red-300 bg-red-50 px-3 py-1 text-sm font-medium text-red-700 transition hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              Excluir post
+            </button>
+          </form>
         </div>
         {missingRequestedLocale && requestedLocale && (
           <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">

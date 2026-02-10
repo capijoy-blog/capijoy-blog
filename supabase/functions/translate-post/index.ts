@@ -8,7 +8,10 @@ const supabaseAdmin = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
 );
 
-const translate = async (text: string, lang: string): Promise<string> => {
+const SUPPORTED_LOCALES = ['pt', 'en', 'es'] as const;
+type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+
+const translate = async (text: string, lang: SupportedLocale, sourceLang: SupportedLocale): Promise<string> => {
   if (!text) return "";
   const apiKey = Deno.env.get("GOOGLE_API_KEY");
   if (!apiKey) {
@@ -23,7 +26,7 @@ const translate = async (text: string, lang: string): Promise<string> => {
     body: JSON.stringify({
       q: text,
       target: lang,
-      source: "pt",
+      source: sourceLang,
     }),
   });
   if (!response.ok) {
@@ -39,6 +42,8 @@ const handler: Handler = async (req) => {
   const post = payload.record as {
     locale?: string;
     title?: string;
+    slug?: string;
+    original_slug?: string;
     excerpt?: string;
     content_html?: string;
     [key: string]: unknown;
@@ -48,19 +53,31 @@ const handler: Handler = async (req) => {
     return new Response(JSON.stringify({ message: 'Missing post data' }), { status: 400 });
   }
 
-  if (post.locale !== 'pt') {
-    return new Response(JSON.stringify({ message: 'Post is not in Portuguese, skipping translation' }), { status: 200 });
+  const sourceLocale =
+    typeof post.locale === 'string' && SUPPORTED_LOCALES.includes(post.locale as SupportedLocale)
+      ? (post.locale as SupportedLocale)
+      : null;
+
+  if (!sourceLocale) {
+    return new Response(JSON.stringify({ message: 'Unsupported post locale for translation' }), { status: 400 });
   }
 
   if (!post.slug || typeof post.slug !== 'string') {
     return new Response(JSON.stringify({ message: 'Post slug is required for translation' }), { status: 400 });
   }
 
-  const targetLanguages = ['en', 'es'];
+  const slug = post.slug;
+  const originalSlug =
+    typeof post.original_slug === 'string' && post.original_slug.trim().length > 0
+      ? post.original_slug
+      : slug;
+
+  const targetLanguages = SUPPORTED_LOCALES.filter(locale => locale !== sourceLocale);
   const baseStatus = typeof post.status === 'string' && post.status.toLowerCase() === 'published' ? 'published' : 'draft';
   const basePublishedAt =
     typeof post.published_at === 'string' && post.published_at ? post.published_at : null;
   const timestampNow = new Date().toISOString();
+  const candidateSlugs = Array.from(new Set([slug, originalSlug]));
 
   try {
     for (const lang of targetLanguages) {
@@ -68,9 +85,9 @@ const handler: Handler = async (req) => {
       await new Promise(resolve => setTimeout(resolve, 200));
 
       const [translatedTitle, translatedExcerpt, translatedContent] = await Promise.all([
-        translate(post.title ?? '', lang),
-        translate(post.excerpt ?? '', lang),
-        translate(post.content_html ?? '', lang)
+        translate(post.title ?? '', lang, sourceLocale),
+        translate(post.excerpt ?? '', lang, sourceLocale),
+        translate(post.content_html ?? '', lang, sourceLocale)
       ]);
 
       const normalizedExcerpt = translatedExcerpt ? translatedExcerpt : null;
@@ -87,19 +104,8 @@ const handler: Handler = async (req) => {
         normalizedCoverImage = coverImageInput;
       }
 
-      const { data: existingPost, error: fetchError } = await supabaseAdmin
-        .from('posts')
-        .select('id')
-        .eq('slug', post.slug)
-        .eq('locale', lang)
-        .maybeSingle();
-
-      if (fetchError) {
-        console.error(`Failed to check existing translated post for ${lang}:`, fetchError);
-        continue;
-      }
-
       const basePayload = {
+        slug,
         title: translatedTitle,
         excerpt: normalizedExcerpt,
         content_html: translatedContent,
@@ -112,32 +118,104 @@ const handler: Handler = async (req) => {
         basePayload.cover_image_url = normalizedCoverImage;
       }
 
-      if (existingPost) {
-        const { error: updateError } = await supabaseAdmin
-          .from('posts')
-          .update(basePayload)
-          .eq('id', existingPost.id);
+      let didPersistTranslation = false;
+      const upsertPayload = {
+        locale: lang,
+        ...basePayload
+      };
 
-        if (updateError) {
-          console.error(`Failed to update translated post for ${lang}:`, updateError);
-        }
+      if (!('cover_image_url' in upsertPayload)) {
+        upsertPayload.cover_image_url = normalizedCoverImage ?? null;
+      }
+
+      const { error: upsertError } = await supabaseAdmin
+        .from('posts')
+        .upsert(upsertPayload, {
+          onConflict: 'slug,locale'
+        });
+
+      if (!upsertError) {
+        didPersistTranslation = true;
       } else {
-        const insertPayload = {
-          slug: post.slug,
-          locale: lang,
-          ...basePayload
-        };
+        console.error(`Failed to upsert translated post for ${lang}, trying fallback flow:`, upsertError);
 
-        if (!('cover_image_url' in insertPayload)) {
-          insertPayload.cover_image_url = normalizedCoverImage ?? null;
+        const { data: existingPosts, error: fetchError } = await supabaseAdmin
+          .from('posts')
+          .select('id, slug')
+          .eq('locale', lang)
+          .in('slug', candidateSlugs)
+          .order('updated_at', { ascending: false });
+
+        if (fetchError) {
+          console.error(`Failed to check existing translated post for ${lang}:`, fetchError);
+          continue;
         }
 
-        const { error: insertError } = await supabaseAdmin
-          .from('posts')
-          .insert(insertPayload);
+        const preferredPost =
+          (existingPosts ?? []).find(candidate => candidate.slug === slug) ??
+          (existingPosts ?? []).find(candidate => candidate.slug === originalSlug) ??
+          null;
 
-        if (insertError) {
-          console.error(`Failed to insert translated post for ${lang}:`, insertError);
+        if (preferredPost) {
+          const { error: updateError } = await supabaseAdmin
+            .from('posts')
+            .update(basePayload)
+            .eq('id', preferredPost.id);
+
+          if (updateError) {
+            console.error(`Failed to update translated post for ${lang}:`, updateError);
+            continue;
+          }
+
+          const duplicateIds = (existingPosts ?? [])
+            .filter(candidate => candidate.id !== preferredPost.id)
+            .map(candidate => candidate.id);
+
+          if (duplicateIds.length > 0) {
+            const { error: duplicateDeleteError } = await supabaseAdmin
+              .from('posts')
+              .delete()
+              .in('id', duplicateIds);
+
+            if (duplicateDeleteError) {
+              console.error(`Failed to clean duplicate translated posts for ${lang}:`, duplicateDeleteError);
+            }
+          }
+
+          didPersistTranslation = true;
+        } else {
+          const insertPayload = {
+            locale: lang,
+            slug,
+            ...basePayload
+          } as Record<string, unknown>;
+
+          if (!('cover_image_url' in insertPayload)) {
+            insertPayload.cover_image_url = normalizedCoverImage ?? null;
+          }
+
+          const { error: insertError } = await supabaseAdmin
+            .from('posts')
+            .insert(insertPayload);
+
+          if (insertError) {
+            console.error(`Failed to insert translated post for ${lang}:`, insertError);
+            continue;
+          }
+
+          didPersistTranslation = true;
+        }
+      }
+
+      if (didPersistTranslation && originalSlug !== slug) {
+        const { error: oldSlugCleanupError } = await supabaseAdmin
+          .from('posts')
+          .delete()
+          .eq('locale', lang)
+          .eq('slug', originalSlug);
+
+        if (oldSlugCleanupError) {
+          console.error(`Failed to clean old slug translation for ${lang}:`, oldSlugCleanupError);
         }
       }
     }

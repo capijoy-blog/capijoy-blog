@@ -9,7 +9,9 @@
     "faq": "FAQ",
     "press": "Press Kit",
     "contact": "Contact",
-    "logoAlt": "Capí Joy logo"
+    "logoAlt": "Capí Joy logo",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "language": {
     "pt": "PT",
@@ -24,7 +26,7 @@
     "system": "System"
   },
   "footer": {
-    "copyright": "© Capí Joy 2025 - All rights reserved.",
+    "copyright": "\u00A9 Cap\u00ED Joy {year} \u2014 All rights reserved.",
     "tagline": "Art that heals through truth.",
     "address": "Minas Gerais, Brazil",
     "socials": {

@@ -3,6 +3,7 @@
 import { useActionState, useRef, useState, useTransition } from 'react';
 import TiptapEditor from '@/components/TiptapEditor';
 import { createPost, type CreatePostState } from './actions';
+import { slugify } from '@/lib/slugify';
 
 const initialState: CreatePostState = { message: '' };
 
@@ -11,11 +12,29 @@ export default function NewPostPage() {
   const [isPending, startTransition] = useTransition();
   const [submissionIntent, setSubmissionIntent] = useState<'publish' | 'draft'>('publish');
   const intentRef = useRef<'publish' | 'draft'>('publish');
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [slugTouched, setSlugTouched] = useState(false);
   const [contentHtml, setContentHtml] = useState('');
 
   const handleSubmit = (formData: FormData) => {
+    const autoSlug = slugify(title);
+    const effectiveSlug = slug.trim() || autoSlug;
+    formData.set('slug', effectiveSlug);
     formData.set('intent', intentRef.current);
     startTransition(() => formAction(formData));
+  };
+
+  const handleTitleChange = (nextTitle: string) => {
+    setTitle(nextTitle);
+    if (!slugTouched) {
+      setSlug(slugify(nextTitle));
+    }
+  };
+
+  const handleSlugChange = (nextSlug: string) => {
+    setSlug(nextSlug);
+    setSlugTouched(nextSlug.trim().length > 0);
   };
 
   return (
@@ -29,6 +48,8 @@ export default function NewPostPage() {
             name="title"
             type="text"
             required
+            value={title}
+            onChange={event => handleTitleChange(event.target.value)}
             className="w-full px-3 py-2 mt-1 text-neutral-900 bg-white border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder-neutral-400"
           />
         </div>
@@ -39,6 +60,8 @@ export default function NewPostPage() {
             name="slug"
             type="text"
             required
+            value={slug}
+            onChange={event => handleSlugChange(event.target.value)}
             className="w-full px-3 py-2 mt-1 text-neutral-900 bg-white border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 placeholder-neutral-400"
           />
         </div>

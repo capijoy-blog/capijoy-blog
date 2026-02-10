@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import ShareMenu from "@/components/site/ShareMenu";
 import { supabase } from "@/lib/supabase";
+import { localizePath } from '@/lib/localePath';
 import type { Locale } from "@/i18n/locales";
 
 export const runtime = "nodejs";
@@ -83,12 +84,12 @@ export default async function HomePosts({ locale }: HomePostsProps) {
             )}
             <div className="flex items-center justify-between gap-3 pt-1">
               <Link
-                href={`/${locale}/blog/${post.slug}`}
+                href={localizePath(locale, `/blog/${post.slug}`)}
                 className="text-sm font-medium text-white underline underline-offset-4 hover:text-cj-accent transition-colors"
               >
                 {t("readPost")}
               </Link>
-              <ShareMenu url={`/${locale}/blog/${post.slug}`} title={post.title} />
+              <ShareMenu url={localizePath(locale, `/blog/${post.slug}`)} title={post.title} />
             </div>
           </div>
         </article>

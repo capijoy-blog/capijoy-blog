@@ -1,49 +1,18 @@
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaArrowRight, FaBookOpen, FaPlay, FaSpotify, FaYoutube, FaApple } from 'react-icons/fa6';
-import { getTranslations } from 'next-intl/server';
+import { FaApple, FaArrowRight, FaBookOpen, FaPlay, FaSpotify, FaYoutube } from 'react-icons/fa6';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import Accordion from '@/components/site/Accordion';
-import TikTokCarousel, { type TikTokVideo } from '@/components/site/TikTokCarousel';
 import HomePosts from '@/components/site/HomePosts';
 import SectionSeparator from '@/components/site/SectionSeparator';
-import type { Locale } from '@/i18n/locales';
-import { absoluteUrl } from '@/lib/urls';
-
+import TikTokCarousel, { type TikTokVideo } from '@/components/site/TikTokCarousel';
 import { getExperienceTopics } from '@/data/experiences';
-
-const PILLARS = [
-  { title: 'Liberdade', text: 'Viver sem correntes invisíveis. Gritar basta quando algo rouba a alma.' },
-  { title: 'Paz', text: 'Calma firme no peito, mesmo em meio à guerra. Paz que começa por dentro.' },
-  { title: 'Verdade', text: 'Sem maquiagem, sem máscaras. Arte que fala do real, não do perfeito.' },
-  { title: 'Fé prática', text: 'Espiritualidade simples, humana e viva. Deus presente na vida real.' },
-  { title: 'Propósito', text: 'Arte para ser útil. Música, texto e palavra para levantar quem caiu.' }
-];
-
-const FAQ_QUESTIONS = [
-  {
-    q: 'Quem é Capí Joy?',
-    a: 'Compositor, escritor e artista independente brasileiro. Une música, espiritualidade prática e verdade emocional para falar sobre liberdade, paz e recomeços.'
-  },
-  {
-    q: 'Qual sua missão?',
-    a: 'Inspirar pessoas a viverem com fé, verdade e liberdade. Quer ser útil, não famoso: “Se algo que escrevo tocar uma pessoa, já valeu.”'
-  },
-  {
-    q: 'O que significa a música BASTA?',
-    a: 'Um grito de alma. Protesto espiritual e coragem para dizer basta a tudo que rouba a paz interior. É um chamado para acordar e voltar aos princípios de Deus.'
-  },
-  {
-    q: 'Como você fala sobre liberdade e paz?',
-    a: 'Liberdade é destino; paz é base. É vida real: paz começa por dentro, e liberdade vem de escolhas cotidianas com fé prática.'
-  },
-  {
-    q: 'Como recebo o livro “Clamor por Justiça e Liberdade”?',
-    a: 'Preencha o formulário ou envie mensagem no WhatsApp. Nenhum PDF abre direto: nome e e-mail são obrigatórios para seguirmos juntos.'
-  }
-] as const;
+import { HOME_COPY } from '@/data/homeCopy';
+import type { Locale } from '@/i18n/locales';
+import { localizePath } from '@/lib/localePath';
+import { absoluteUrl } from '@/lib/urls';
 
 type TikTokFallbackKey = 'basta' | 'spotify' | 'inspire' | 'hope';
 
@@ -120,86 +89,85 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const path = `/${locale}`;
+  const home = HOME_COPY[locale] ?? HOME_COPY.pt;
+  const path = localizePath(locale, '/');
   const url = absoluteUrl(path);
 
   return {
-    title: 'Capí Joy — Música, Palavra e Verdade | Oficial',
-    description: 'Conheça Capí Joy: músicas, textos e projetos que unem verdade, fé e liberdade. Arte independente feita para inspirar e transformar.',
+    title: home.metadata.title,
+    description: home.metadata.description,
     alternates: {
       canonical: url,
       languages: {
-        'pt-BR': absoluteUrl('/pt'),
-        'en-US': absoluteUrl('/en'),
-        'es-ES': absoluteUrl('/es')
+        'pt-BR': absoluteUrl(localizePath('pt', '/')),
+        'en-US': absoluteUrl(localizePath('en', '/')),
+        'es-ES': absoluteUrl(localizePath('es', '/'))
       }
     },
     openGraph: {
-      title: 'Capí Joy — música, palavra e verdade que transformam',
-      description: 'Capí Joy é artista independente. Música, texto e espiritualidade prática para quem busca liberdade e paz.',
+      title: home.metadata.ogTitle,
+      description: home.metadata.ogDescription,
       url,
       type: 'website'
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Capí Joy — música, palavra e verdade',
-      description: 'Arte espiritual, humana e direta. BASTA, ALELUIA e o livro Clamor por Justiça e Liberdade.'
+      title: home.metadata.twitterTitle,
+      description: home.metadata.twitterDescription
     }
   };
 }
 
 export default async function Page({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
+  const home = HOME_COPY[locale] ?? HOME_COPY.pt;
   const tiktokT = await getTranslations({ locale, namespace: 'tiktok' });
   const tMusic = await getTranslations({ locale, namespace: 'musicas' });
   const topics = getExperienceTopics(locale);
 
-  const FEATURE_CARDS = [
+  const featureCards = [
     {
       title: 'BASTA',
-      tag: 'Single • Protesto espiritual • YouTube',
-      description:
-        'Uma canção de protesto e coragem. É o grito da alma por justiça, liberdade e retorno aos princípios que nos levantam.',
+      tag: home.music.cards.basta.tag,
+      description: home.music.cards.basta.description,
       image: '/assets/capa_basta.webp',
       primary: {
-        label: 'Assista ao clipe',
+        label: home.music.cards.basta.primary,
         href: 'https://www.youtube.com/watch?v=6EVY-Ef8GRY',
         Icon: FaYoutube
       },
       secondary: {
-        label: 'Letra e bastidores',
+        label: home.music.cards.basta.secondary,
         href: '/musicas#basta'
       }
     },
     {
       title: 'ALELUIA',
-      tag: 'Single • Louvor íntimo • Spotify',
-      description:
-        'Uma oração em forma de melodia. Leve, espiritual e verdadeira para quem precisa respirar fé e descanso.',
+      tag: home.music.cards.aleluia.tag,
+      description: home.music.cards.aleluia.description,
       image: '/assets/capi-joy-spotify.webp',
       primary: {
-        label: 'Ouvir agora',
+        label: home.music.cards.aleluia.primary,
         href: 'https://open.spotify.com/intl-pt/artist/6l2XVPCSpXi3oKheB3UvKI',
         Icon: FaSpotify
       },
       secondary: {
-        label: 'Ver detalhes',
+        label: home.music.cards.aleluia.secondary,
         href: '/musicas#aleluia'
       }
     },
     {
-      title: 'Clamor por Justiça e Liberdade',
-      tag: 'Livro • Mensagem central',
-      description:
-        'Nasceu das madrugadas, das feridas e da fé que insiste. Um chamado para viver liberdade e paz por dentro.',
+      title: home.music.cards.book.title,
+      tag: home.music.cards.book.tag,
+      description: home.music.cards.book.description,
       image: '/assets/banner-capi-joy-livro.webp',
       primary: {
-        label: 'Ler sobre o livro',
+        label: home.music.cards.book.primary,
         href: '/livro',
         Icon: FaBookOpen
       },
       secondary: {
-        label: 'Capturar leads',
+        label: home.music.cards.book.secondary,
         href: '/contato#captura'
       }
     },
@@ -230,21 +198,17 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
   return (
     <>
-      <section id="topo" className="hero-animated-bg relative isolate flex min-h-[85vh] w-full flex-row flex-wrap items-start justify-between overflow-hidden md:flex-col md:flex-nowrap md:justify-center lg:flex-row lg:justify-center lg:items-center pt-12 md:pt-0">
-        {/* Background Graphic/Gradient - Handled by hero-animated-bg class */}
-
-
-        {/* Content Side (Left) */}
-        <div className="relative z-10 flex w-[60%] items-center justify-start px-4 py-2 sm:px-6 md:w-full lg:w-1/2 lg:py-20 lg:pl-32 lg:justify-start">
+      <section
+        id="topo"
+        className="hero-animated-bg relative isolate flex min-h-[85vh] w-full flex-row flex-wrap items-start justify-between overflow-hidden pt-12 md:flex-col md:flex-nowrap md:justify-center md:pt-0 lg:flex-row lg:items-center lg:justify-center"
+      >
+        <div className="relative z-10 flex w-[60%] items-center justify-start px-4 py-2 sm:px-6 md:w-full lg:w-1/2 lg:justify-start lg:pl-32 lg:py-20">
           <div className="max-w-xl space-y-8">
-
             <h1 className="text-4xl font-black uppercase leading-none tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Capí Joy <br /> <span className="italic">Voz</span>, Verdade <br /> e Liberdade
+              {home.hero.headingPrefix} <br /> <span className="italic">{home.hero.headingEmphasis}</span>
+              {home.hero.headingSuffix}
             </h1>
-            <p className="hidden max-w-lg text-lg leading-relaxed text-gray-300 md:block">
-              Música, palavra e mensagem para despertar a alma. Canções, livros e reflexões que nasceram da vida real,
-              de dores, fé, quedas e recomeços.
-            </p>
+            <p className="hidden max-w-lg text-lg leading-relaxed text-gray-300 md:block">{home.hero.description}</p>
             <div className="hidden flex-wrap items-center gap-4 md:flex">
               <Link
                 href="https://www.youtube-nocookie.com/watch?v=6EVY-Ef8GRY"
@@ -252,68 +216,62 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-black shadow-xl shadow-white/10 transition hover:scale-105 hover:bg-cj-textSoft hover:shadow-2xl"
               >
-                <FaPlay aria-hidden /> Ouvir BASTA
+                <FaPlay aria-hidden /> {home.hero.listenBasta}
               </Link>
               <Link
-                href={`/${locale}/musicas#aleluia`}
+                href={localizePath(locale, '/musicas#aleluia')}
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
               >
-                Ouvir ALELUIA
+                {home.hero.listenAleluia}
               </Link>
             </div>
             <div className="hidden pt-2 md:block">
               <Link
-                href={`/${locale}/livro`}
+                href={localizePath(locale, '/livro')}
                 className="inline-flex items-center gap-2 text-sm font-semibold text-cj-accent underline decoration-white/20 underline-offset-8 transition hover:text-white"
               >
-                <FaBookOpen aria-hidden /> Clamor por Justiça e Liberdade
+                <FaBookOpen aria-hidden /> {home.hero.bookCta}
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Image Side (Right) */}
         <div className="relative h-[40vh] w-[38%] md:order-last md:h-[50vh] md:w-full lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2 lg:order-none">
           <Image
             src="/assets/hero-image-capi-joy.webp"
-            alt="Capí Joy"
+            alt={home.hero.imageAlt}
             fill
             priority
             className="object-contain object-top lg:object-bottom"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
-          {/* Requested Gradient: Degrade com opacidade na parte de embaixo */}
           <div className="absolute inset-x-0 bottom-0 h-48" />
         </div>
 
-        {/* Mobile Content (Below Image) */}
         <div className="relative z-10 flex w-full flex-col items-start gap-6 px-4 pb-12 md:hidden">
-          <p className="max-w-lg text-lg leading-relaxed text-gray-300">
-            Música, palavra e mensagem para despertar a alma. Canções, livros e reflexões que nasceram da vida real,
-            de dores, fé, quedas e recomeços.
-          </p>
-          <div className="flex flex-col w-full gap-4 sm:flex-row sm:items-center">
+          <p className="max-w-lg text-lg leading-relaxed text-gray-300">{home.hero.description}</p>
+          <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center">
             <Link
               href="https://www.youtube-nocookie.com/watch?v=6EVY-Ef8GRY"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full justify-center items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-black shadow-xl shadow-white/10 transition hover:scale-105 hover:bg-cj-textSoft hover:shadow-2xl sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-black shadow-xl shadow-white/10 transition hover:scale-105 hover:bg-cj-textSoft hover:shadow-2xl sm:w-auto"
             >
-              <FaPlay aria-hidden /> Ouvir BASTA
+              <FaPlay aria-hidden /> {home.hero.listenBasta}
             </Link>
             <Link
-              href={`/${locale}/musicas#aleluia`}
-              className="inline-flex w-full justify-center items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:w-auto"
+              href={localizePath(locale, '/musicas#aleluia')}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:w-auto"
             >
-              Ouvir ALELUIA
+              {home.hero.listenAleluia}
             </Link>
           </div>
           <div className="pt-2">
             <Link
-              href={`/${locale}/livro`}
+              href={localizePath(locale, '/livro')}
               className="inline-flex items-center gap-2 text-sm font-semibold text-cj-accent underline decoration-white/20 underline-offset-8 transition hover:text-white"
             >
-              <FaBookOpen aria-hidden /> Clamor por Justiça e Liberdade
+              <FaBookOpen aria-hidden /> {home.hero.bookCta}
             </Link>
           </div>
         </div>
@@ -321,8 +279,11 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
       <section className="mx-auto w-full max-w-7xl px-4 py-12">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {PILLARS.map(pillar => (
-            <div key={pillar.title} className="section-card rounded-2xl px-4 py-5 bg-zinc-900 hover:bg-zinc-800 transition-colors">
+          {home.pillars.map(pillar => (
+            <div
+              key={pillar.title}
+              className="section-card rounded-2xl bg-zinc-900 px-4 py-5 transition-colors hover:bg-zinc-800"
+            >
               <p className="text-xs uppercase tracking-[0.15em] text-cj-accent">{pillar.title}</p>
               <p className="mt-2 text-sm text-cj-textMuted">{pillar.text}</p>
             </div>
@@ -335,23 +296,20 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
       <section id="musicas" className="mx-auto w-full max-w-7xl space-y-8 px-4 py-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Destaques</p>
-            <h2 className="text-3xl font-semibold text-cj-text">Músicas e mensagem central</h2>
-            <p className="max-w-2xl text-sm text-muted">
-              BASTA, ALELUIA e o livro Clamor por Justiça e Liberdade formam o núcleo da obra de Capí Joy.
-              Conteúdo feito para tocar, despertar e curar.
-            </p>
+            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">{home.music.eyebrow}</p>
+            <h2 className="text-3xl font-semibold text-cj-text">{home.music.title}</h2>
+            <p className="max-w-2xl text-sm text-muted">{home.music.description}</p>
           </div>
           <Link
-            href={`/${locale}/musicas`}
+            href={localizePath(locale, '/musicas')}
             className="inline-flex items-center gap-2 text-sm font-semibold text-cj-accent underline underline-offset-8"
           >
-            Ver discografia
+            {home.music.viewDiscography}
             <FaArrowRight aria-hidden />
           </Link>
         </div>
         <div className="grid gap-6 sm:grid-cols-2">
-          {FEATURE_CARDS.map(card => (
+          {featureCards.map(card => (
             <article key={card.title} className="section-card flex flex-col overflow-hidden rounded-3xl">
               <div className="relative aspect-[16/10] w-full overflow-hidden">
                 <Image
@@ -370,7 +328,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
                 <div className="mt-auto flex flex-wrap items-center gap-3">
                   {(() => {
                     const isExternal = card.primary.href.startsWith('http');
-                    const primaryHref = isExternal ? card.primary.href : `/${locale}${card.primary.href}`;
+                    const primaryHref = isExternal ? card.primary.href : localizePath(locale, card.primary.href);
                     return (
                       <Link
                         href={primaryHref}
@@ -384,7 +342,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
                     );
                   })()}
                   <Link
-                    href={`/${locale}${card.secondary.href}`}
+                    href={localizePath(locale, card.secondary.href)}
                     className="text-sm font-semibold underline decoration-cj-accent underline-offset-8 transition hover:text-cj-accent"
                   >
                     {card.secondary.label}
@@ -398,11 +356,14 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
       <SectionSeparator variant="life" className="opacity-60" />
 
-      <section id="sobre" className="mx-auto w-full max-w-7xl gap-10 px-4 py-10 lg:grid lg:grid-cols-[1fr_1.2fr] lg:items-center">
+      <section
+        id="sobre"
+        className="mx-auto w-full max-w-7xl gap-10 px-4 py-10 lg:grid lg:grid-cols-[1fr_1.2fr] lg:items-center"
+      >
         <div className="relative aspect-[3/4]">
           <Image
             src="/assets/retrato-capi-joy.webp"
-            alt="Retrato de Capí Joy"
+            alt={home.about.imageAlt}
             fill
             className="object-contain"
             sizes="(max-width: 1024px) 100vw, 40vw"
@@ -410,28 +371,19 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
           />
         </div>
         <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Sobre Capí Joy</p>
-          <h2 className="text-3xl font-semibold text-cj-text">Arte que nasce da vida real</h2>
-          <p className="text-base text-cj-textMuted">
-            Capí Joy é compositor, escritor e artista independente. Transforma dores, fé e recomeços em arte que inspira
-            liberdade, paz e verdade. Sua música e suas palavras falam de espiritualidade prática, protesto espiritual e
-            da coragem de viver com propósito.
-          </p>
-          <p className="text-base text-muted">
-            “Se algo que escrevo tocar uma pessoa, já valeu.”, Capí Joy.
-          </p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">{home.about.eyebrow}</p>
+          <h2 className="text-3xl font-semibold text-cj-text">{home.about.title}</h2>
+          <p className="text-base text-cj-textMuted">{home.about.description}</p>
+          <p className="text-base text-muted">{home.about.quote}</p>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href={`/${locale}/sobre`}
-              className="surface-button rounded-full px-5 py-3 text-sm font-semibold"
-            >
-              Ler a bio completa
+            <Link href={localizePath(locale, '/sobre')} className="surface-button rounded-full px-5 py-3 text-sm font-semibold">
+              {home.about.bioCta}
             </Link>
             <Link
-              href={`/${locale}/projetos`}
+              href={localizePath(locale, '/projetos')}
               className="inline-flex items-center gap-2 text-sm font-semibold underline decoration-cj-accent underline-offset-8"
             >
-              Projetos e agenda
+              {home.about.projectsCta}
               <FaArrowRight aria-hidden />
             </Link>
           </div>
@@ -440,20 +392,15 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
       <section id="conferencias" className="mx-auto w-full max-w-7xl space-y-6 px-4 py-10">
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">Experiências</p>
-          <h2 className="text-3xl font-semibold text-[var(--page-text)]">Imersões, conferências e séries</h2>
-          <p className="max-w-3xl text-sm text-muted">
-            Conteúdo pensado para palco, rodas de conversa e encontros espirituais. Palavra, música, storytelling e
-            prática.
-          </p>
+          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent-soft)]">{home.experiences.eyebrow}</p>
+          <h2 className="text-3xl font-semibold text-[var(--page-text)]">{home.experiences.title}</h2>
+          <p className="max-w-3xl text-sm text-muted">{home.experiences.description}</p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {topics.map(topic => (
             <div key={topic.slug} className="section-card flex flex-col gap-2 rounded-2xl px-5 py-5">
               <h3 className="text-lg font-semibold leading-tight text-cj-text">{topic.title}</h3>
-              {topic.theme && (
-                <p className="text-xs uppercase tracking-wider text-cj-accent">{topic.theme}</p>
-              )}
+              {topic.theme && <p className="text-xs uppercase tracking-wider text-cj-accent">{topic.theme}</p>}
               <p className="mt-2 text-sm leading-relaxed text-cj-textMuted">{topic.shortSummary}</p>
             </div>
           ))}
@@ -462,43 +409,39 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
       <SectionSeparator variant="book" className="text-cj-accent" />
 
-      <section id="livro" className="mx-auto w-full max-w-7xl gap-10 px-4 py-10 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <section
+        id="livro"
+        className="mx-auto w-full max-w-7xl gap-10 px-4 py-10 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
+      >
         <div className="space-y-4">
-          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Livros</p>
-          <h2 className="text-3xl font-semibold text-cj-text">Clamor por Justiça e Liberdade</h2>
-          <p className="text-base text-cj-textMuted">
-            Um livro ainda no prelo, mas com uma mensagem urgente: justiça e liberdade como fome da alma, não só como tema de política ou leis. Um reencontro entre a carta aberta escrita em 1992 e o adulto de 2025 que ainda acredita que a luta por dignidade vale a pena.
-          </p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">{home.book.eyebrow}</p>
+          <h2 className="text-3xl font-semibold text-cj-text">{home.book.title}</h2>
+          <p className="text-base text-cj-textMuted">{home.book.description}</p>
           <div className="flex flex-wrap gap-3">
             <Link
-              href={`/${locale}/livro`}
+              href={localizePath(locale, '/livro')}
               className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
             >
               <FaBookOpen aria-hidden />
-              Ver detalhes do livro
+              {home.book.detailsCta}
             </Link>
-            <Link
-              href={`/${locale}/contato#captura`}
-              className="surface-button rounded-full px-5 py-3 text-sm font-semibold"
-            >
-              Receber um trecho
+            <Link href={localizePath(locale, '/contato#captura')} className="surface-button rounded-full px-5 py-3 text-sm font-semibold">
+              {home.book.excerptCta}
             </Link>
           </div>
         </div>
         <div className="section-card rounded-3xl p-6">
           <div className="flex items-start gap-4">
-            <div className="relative h-28 w-20 flex-shrink-0 overflow-hidden rounded-lg shadow-lg rotate-2 transition-transform hover:rotate-0">
+            <div className="relative h-28 w-20 flex-shrink-0 rotate-2 overflow-hidden rounded-lg shadow-lg transition-transform hover:rotate-0">
               <Image
                 src="/assets/capa-de-livro1.webp"
-                alt="Capa do livro Clamor por Justiça e Liberdade"
+                alt={home.book.coverAlt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 80px, 120px"
               />
             </div>
-            <p className="text-sm font-light leading-relaxed text-muted">
-              “Clamor por Justiça e Liberdade” é um livro que nasce do choque entre passado e presente. Trinta anos depois de uma carta aberta ao povo de Porto Alegre, os sistemas seguem falhos, mas a esperança continua viva. Não é um livro de ressentimento, é um livro de responsabilidade.
-            </p>
+            <p className="text-sm font-light leading-relaxed text-muted">{home.book.blurb}</p>
           </div>
         </div>
       </section>
@@ -506,17 +449,14 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
       <section id="blog" className="mx-auto w-full max-w-7xl space-y-4 px-4 py-10">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Mensagens</p>
-            <h2 className="text-3xl font-semibold">Blog / Reflexões</h2>
-            <p className="text-sm text-cj-textMuted">
-              Reflexões simples e profundas sobre fé, liberdade, recomeços e espiritualidade prática, para ler, guardar e compartilhar com quem você ama.
-            </p>
+            <h2 className="text-3xl font-semibold">{home.blog.title}</h2>
+            <p className="text-sm text-cj-textMuted">{home.blog.description}</p>
           </div>
           <Link
-            href={`/${locale}/blog`}
+            href={localizePath(locale, '/blog')}
             className="inline-flex items-center gap-2 text-sm font-semibold underline decoration-cj-accent underline-offset-8"
           >
-            Ver todas
+            {home.blog.viewAll}
             <FaArrowRight aria-hidden />
           </Link>
         </div>
@@ -528,15 +468,15 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
       <section id="social" className="mx-auto w-full max-w-7xl space-y-4 px-4 py-10">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Redes</p>
-            <h2 className="text-3xl font-semibold">Cortes e mensagens</h2>
-            <p className="text-sm text-muted">Siga, curta e compartilhe nas nossas redes sociais</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">{home.social.eyebrow}</p>
+            <h2 className="text-3xl font-semibold">{home.social.title}</h2>
+            <p className="text-sm text-muted">{home.social.description}</p>
           </div>
           <Link
-            href={`/${locale}/ia`}
+            href={localizePath(locale, '/ia')}
             className="inline-flex items-center gap-2 text-sm font-semibold underline decoration-cj-accent underline-offset-8"
           >
-            Página para IA entender Capí Joy
+            {home.social.aiPageCta}
             <FaArrowRight aria-hidden />
           </Link>
         </div>
@@ -546,15 +486,13 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
       <section id="contato" className="mx-auto w-full max-w-7xl px-4 py-14">
         <div className="section-card grid gap-8 rounded-3xl p-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">Contato</p>
-            <h3 className="text-2xl font-semibold">Convites e parcerias</h3>
-            <p className="text-sm text-cj-textMuted">
-              Este espaço é para quem deseja se conectar comigo de forma mais direta: convites para eventos, entrevistas, projetos, colaborações, ou simplesmente para compartilhar o que minhas músicas e palavras geraram em você.
-            </p>
+            <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">{home.contact.eyebrow}</p>
+            <h3 className="text-2xl font-semibold">{home.contact.title}</h3>
+            <p className="text-sm text-cj-textMuted">{home.contact.description}</p>
             <div className="mt-4">
               <Image
                 src="/assets/oi-image-capi-joy.webp"
-                alt="Capí Joy"
+                alt={home.contact.imageAlt}
                 width={170}
                 height={170}
                 className="object-contain"
@@ -563,46 +501,46 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
           </div>
           <form
             id="captura"
-            action="mailto:contato@capijoy.com.br?subject=Contato%20via%20site%20Cap%C3%AD%20Joy"
+            action="mailto:contato@capijoy.com.br?subject=Contato%20via%20site%20Capi%20Joy"
             method="POST"
             encType="text/plain"
             className="grid gap-3"
           >
             <label className="flex flex-col gap-1 text-sm font-medium">
-              Nome *
+              {home.contact.nameLabel}
               <input
                 type="text"
                 name="name"
                 required
-                placeholder="Como devemos te chamar?"
+                placeholder={home.contact.namePlaceholder}
                 className="input-surface rounded-xl px-4 py-3 text-sm"
               />
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium">
-              E-mail *
+              {home.contact.emailLabel}
               <input
                 type="email"
                 name="email"
                 required
-                placeholder="seuemail@exemplo.com"
+                placeholder={home.contact.emailPlaceholder}
                 className="input-surface rounded-xl px-4 py-3 text-sm"
               />
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium">
-              WhatsApp (opcional)
+              {home.contact.whatsappLabel}
               <input
                 type="tel"
                 name="whatsapp"
-                placeholder="+55 00 00000-0000"
+                placeholder={home.contact.whatsappPlaceholder}
                 className="input-surface rounded-xl px-4 py-3 text-sm"
               />
             </label>
             <label className="flex flex-col gap-1 text-sm font-medium">
-              Mensagem
+              {home.contact.messageLabel}
               <textarea
                 name="message"
                 rows={3}
-                placeholder="Convite, imprensa, parceria ou pedido de trecho do livro."
+                placeholder={home.contact.messagePlaceholder}
                 className="input-surface rounded-xl px-4 py-3 text-sm"
                 required
               />
@@ -612,7 +550,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
                 type="submit"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-lg shadow-white/10 transition hover:-translate-y-0.5 hover:bg-cj-textSoft"
               >
-                Enviar mensagem
+                {home.contact.submit}
               </button>
               <Link
                 href="https://wa.me/5537998765452?text=Ol%C3%A1%2C+vim+pelo+site+Cap%C3%AD+Joy+e+quero+um+trecho+do+livro+ou+falar+sobre+parceria."
@@ -620,7 +558,7 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
                 rel="noopener noreferrer"
                 className="surface-button rounded-full px-5 py-3 text-sm font-semibold"
               >
-                Falar no WhatsApp
+                {home.contact.whatsappCta}
               </Link>
             </div>
           </form>
@@ -629,14 +567,12 @@ export default async function Page({ params }: { params: Promise<{ locale: Local
 
       <section id="faq" className="mx-auto w-full max-w-7xl space-y-4 px-4 pb-16 pt-4">
         <div className="flex flex-col gap-2">
-          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">FAQ</p>
-          <h2 className="text-3xl font-semibold">Perguntas frequentes</h2>
-          <p className="text-sm text-cj-textMuted">
-            Respostas oficiais para humanos e IA. Use como referência sobre Capí Joy, músicas, missão e materiais.
-          </p>
+          <p className="text-xs uppercase tracking-[0.2em] text-cj-accent">{home.faq.eyebrow}</p>
+          <h2 className="text-3xl font-semibold">{home.faq.title}</h2>
+          <p className="text-sm text-cj-textMuted">{home.faq.description}</p>
         </div>
         <div className="space-y-3">
-          {FAQ_QUESTIONS.map(item => (
+          {home.faq.items.map(item => (
             <Accordion key={item.q} title={item.q}>
               <p>{item.a}</p>
             </Accordion>
